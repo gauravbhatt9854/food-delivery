@@ -36,4 +36,4 @@ build/
 
 
 mvnw.cmd
-src/main/resources/application.yaml
+application.yaml
