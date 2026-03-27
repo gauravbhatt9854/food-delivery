@@ -29,7 +29,7 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     JOIN io.order o
     JOIN io.menuItem mi
     JOIN mi.restaurant r
-    WHERE o.customer.id = :customerId
+    WHERE o.customer.customerId = :customerId
 """)
     List<OrderItemDetailDTO> getOrderDetailsByCustomerId(@Param("customerId") Integer customerId);
 
@@ -50,7 +50,7 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     JOIN io.order o
     JOIN io.menuItem mi
     JOIN mi.restaurant r
-    WHERE o.customer.id = :customerId
+    WHERE o.orderId = :orderId
 """)
-    List<OrderItemDetailDTO> getOrderDetailsByOrderId(@Param("customerId") Integer customerId);
+    List<OrderItemDetailDTO> getOrderDetailsByOrderId(@Param("orderId") Integer orderId);
 }

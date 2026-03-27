@@ -2,6 +2,7 @@ package com.foodservice.config;
 
 import com.foodservice.entity.Customer;
 import com.foodservice.entity.MenuItem;
+import com.foodservice.entity.Order;
 import com.foodservice.entity.Restaurant;
 import com.foodservice.entity.dto.*;
 import org.springframework.stereotype.Component;
@@ -61,5 +62,14 @@ public class CustomMapper {
             dto.setRestaurantId(entity.getRestaurant().getRestaurantId());
         }
         return dto;
+    }
+
+    public static OrderDTO orderToOrderDTO(Order order, OrderDTO orderDTO) {
+        orderDTO.setCustomer(order.getCustomer());
+        orderDTO.setRestaurant(order.getRestaurant());
+        orderDTO.setDeliveryDriver(order.getDeliveryDriver());
+        orderDTO.setOrderStatus(order.getOrderStatus());
+        orderDTO.setOrderDate(order.getOrderDate());
+        return orderDTO;
     }
 }
