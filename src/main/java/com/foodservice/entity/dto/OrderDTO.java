@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -18,4 +19,5 @@ public class OrderDTO {
     private DeliveryDriver deliveryDriver;
     private LocalDateTime orderDate;
     private String orderStatus;
+    private List<OrderItemDetailDTO> orderItems;
 }
