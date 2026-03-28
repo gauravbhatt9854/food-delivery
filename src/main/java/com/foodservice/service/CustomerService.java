@@ -11,7 +11,7 @@ public interface CustomerService {
 
     List<CustomerDTO> getCustomersByCity(String city);
 
-    int getAddressCount(Integer customerId);
+    Integer getAddressCount(Integer customerId);
 
     Object getCustomerAnalytics(Integer customerId);
 }

@@ -9,7 +9,7 @@ public interface DeliveryAddressService {
 
     DeliveryAddressDTO getAddressById(Integer addressId);
 
-    int getAddressCount(Integer customerId);
+    Integer getAddressCount(Integer customerId);
 
     List<DeliveryAddressDTO> getAddressesByCity(String city);
 

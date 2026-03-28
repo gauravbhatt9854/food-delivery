@@ -6,6 +6,10 @@ target/
 
 src/main/resources/application.yaml
 
+logs/
+*.log
+
+
 ### STS ###
 .apt_generated
 .classpath

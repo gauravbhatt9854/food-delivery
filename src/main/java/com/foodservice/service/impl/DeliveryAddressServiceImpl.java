@@ -33,7 +33,7 @@ public class DeliveryAddressServiceImpl implements DeliveryAddressService {
     }
 
     @Override
-    public int getAddressCount(Integer customerId) {
+    public Integer getAddressCount(Integer customerId) {
         return repository.countByCustomerCustomerId(customerId);
     }
 

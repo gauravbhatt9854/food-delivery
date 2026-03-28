@@ -13,7 +13,7 @@ public interface DeliveryAddressRepository extends JpaRepository<DeliveryAddress
 
     List<DeliveryAddress> findByCustomerCustomerId(Integer customerId);
 
-    int countByCustomerCustomerId(Integer customerId);
+    Integer countByCustomerCustomerId(Integer customerId);
 
     Optional<DeliveryAddress> findFirstByCustomerCustomerId(Integer customerId);
 }

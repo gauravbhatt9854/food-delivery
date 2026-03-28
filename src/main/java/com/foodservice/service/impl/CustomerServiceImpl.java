@@ -51,7 +51,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public int getAddressCount(Integer customerId) {
+    public Integer getAddressCount(Integer customerId) {
         return addressRepository.countByCustomerCustomerId(customerId);
     }
 
