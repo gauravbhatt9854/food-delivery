@@ -6,6 +6,7 @@ import com.foodservice.entity.dto.DeliveryAddressDTO;
 import com.foodservice.exception.ResourceNotFoundException;
 import com.foodservice.repository.DeliveryAddressRepository;
 import com.foodservice.service.DeliveryAddressService;
+import com.foodservice.constants.DeliveryAddressErrorConstant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +28,10 @@ public class DeliveryAddressServiceImpl implements DeliveryAddressService {
 
         if (addresses.isEmpty()) {
             throw new ResourceNotFoundException(
-                    "No addresses found for customer id: " + customerId
+                    String.format(
+                            DeliveryAddressErrorConstant.NO_ADDRESSES_FOUND_FOR_CUSTOMER,
+                            customerId
+                    )
             );
         }
 
@@ -39,7 +43,12 @@ public class DeliveryAddressServiceImpl implements DeliveryAddressService {
 
         DeliveryAddress address = repository.findById(addressId)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException("Address not found with id: " + addressId)
+                        new ResourceNotFoundException(
+                                String.format(
+                                        DeliveryAddressErrorConstant.ADDRESS_NOT_FOUND,
+                                        addressId
+                                )
+                        )
                 );
 
         return CustomMapper.deliveryAddressToDTO(address);
@@ -60,7 +69,10 @@ public class DeliveryAddressServiceImpl implements DeliveryAddressService {
 
         if (addresses.isEmpty()) {
             throw new ResourceNotFoundException(
-                    "No addresses found in city: " + city
+                    String.format(
+                            DeliveryAddressErrorConstant.NO_ADDRESSES_FOUND_IN_CITY,
+                            city
+                    )
             );
         }
 
@@ -73,7 +85,10 @@ public class DeliveryAddressServiceImpl implements DeliveryAddressService {
         DeliveryAddress address = repository.findFirstByCustomerCustomerId(customerId)
                 .orElseThrow(() ->
                         new ResourceNotFoundException(
-                                "Default address not found for customer id: " + customerId
+                                String.format(
+                                        DeliveryAddressErrorConstant.DEFAULT_ADDRESS_NOT_FOUND,
+                                        customerId
+                                )
                         )
                 );
 

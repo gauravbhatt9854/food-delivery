@@ -1,5 +1,6 @@
 package com.foodservice.service;
 
+import com.foodservice.entity.dto.CustomerAnalyticsDTO;
 import com.foodservice.entity.dto.CustomerDTO;
 
 import java.util.List;
@@ -13,5 +14,5 @@ public interface CustomerService {
 
     Integer getAddressCount(Integer customerId);
 
-    Object getCustomerAnalytics(Integer customerId);
+    CustomerAnalyticsDTO getCustomerAnalytics(Integer customerId);
 }
