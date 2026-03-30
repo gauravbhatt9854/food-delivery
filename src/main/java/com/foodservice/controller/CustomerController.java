@@ -1,8 +1,5 @@
 package com.foodservice.controller;
-
-import com.foodservice.entity.dto.ApiResponseDTO;
-import com.foodservice.entity.dto.CustomerAnalyticsDTO;
-import com.foodservice.entity.dto.CustomerDTO;
+import com.foodservice.entity.dto.*;
 import com.foodservice.service.CustomerService;
 import com.foodservice.constants.CustomerConstant;
 import lombok.RequiredArgsConstructor;
@@ -39,12 +36,53 @@ public class CustomerController {
                 ));
     }
 
+
+    @GetMapping("/{customerId}/addresses")
+    public ResponseEntity<ApiResponseDTO> getAddressesByCustomerId(@PathVariable Integer customerId) {
+
+        log.info("Received request to fetch delivery addresses for customer. customerId={}", customerId);
+
+        List<DeliveryAddressDTO> addresses = customerService.getAddressesByCustomerId(customerId);
+
+        log.debug("Successfully fetched delivery addresses. customerId={}, totalAddressesCount={}", customerId, addresses.size());
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ApiResponseDTO(
+                        CustomerConstant.STATUS_200,
+                        CustomerConstant.MESSAGE_ADDRESSES_FETCHED,
+                        addresses
+                ));
+    }
+
+
+    @GetMapping("/{customerId}/orders")
+    public ResponseEntity<ApiResponseDTO> getOrdersByCustomerId(@PathVariable Integer customerId) {
+
+        log.info("Received request to fetch orders for customer. customerId={}", customerId);
+
+        List<OrderItemDetailDTO> orders = customerService.getOrdersByCustomerId(customerId);
+
+        log.debug("Successfully fetched orders for customer. customerId={}, ordersData={}", customerId, orders);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ApiResponseDTO(
+                        CustomerConstant.STATUS_200,
+                        CustomerConstant.MESSAGE_CUSTOMER_ORDERS_FETCHED,
+                        orders
+                ));
+    }
+
     @GetMapping
-    public ResponseEntity<ApiResponseDTO> getAllCustomers() {
+    public ResponseEntity<ApiResponseDTO> getAllCustomers(
+            @RequestParam(name = "page", defaultValue = "0") Integer page,
+            @RequestParam(name = "size", defaultValue = "5") Integer size
+    ) {
 
         log.info("Received request to fetch all customers");
 
-        List<CustomerDTO> customers = customerService.getAllCustomers();
+        List<CustomerDTO> customers = customerService.getAllCustomers(page , size);
 
         log.debug("Successfully fetched all customers. totalCustomersCount={}", customers.size());
 

@@ -20,24 +20,6 @@ public class DeliveryAddressController {
 
     private final DeliveryAddressService deliveryAddressService;
 
-    @GetMapping("/customers/{customerId}/addresses")
-    public ResponseEntity<ApiResponseDTO> getAddressesByCustomerId(@PathVariable Integer customerId) {
-
-        log.info("Received request to fetch delivery addresses for customer. customerId={}", customerId);
-
-        List<DeliveryAddressDTO> addresses = deliveryAddressService.getAddressesByCustomerId(customerId);
-
-        log.debug("Successfully fetched delivery addresses. customerId={}, totalAddressesCount={}", customerId, addresses.size());
-
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(new ApiResponseDTO(
-                        DeliveryAddressConstant.STATUS_200,
-                        DeliveryAddressConstant.MESSAGE_ADDRESSES_FETCHED,
-                        addresses
-                ));
-    }
-
     @GetMapping("/addresses/{addressId}")
     public ResponseEntity<ApiResponseDTO> getAddressById(@PathVariable Integer addressId) {
 
