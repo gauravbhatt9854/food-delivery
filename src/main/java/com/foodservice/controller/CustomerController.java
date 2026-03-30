@@ -1,8 +1,8 @@
 package com.foodservice.controller;
 
+import com.foodservice.entity.dto.ApiResponseDTO;
 import com.foodservice.entity.dto.CustomerAnalyticsDTO;
 import com.foodservice.entity.dto.CustomerDTO;
-import com.foodservice.entity.dto.ResponseDTO;
 import com.foodservice.service.CustomerService;
 import com.foodservice.constants.CustomerConstant;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ public class CustomerController {
     private final CustomerService customerService;
 
     @GetMapping("/{customerId}")
-    public ResponseEntity<ResponseDTO> getCustomerById(@PathVariable Integer customerId) {
+    public ResponseEntity<ApiResponseDTO> getCustomerById(@PathVariable Integer customerId) {
 
         log.info("Received request to fetch customer details. customerId={}", customerId);
 
@@ -32,7 +32,7 @@ public class CustomerController {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new ResponseDTO(
+                .body(new ApiResponseDTO(
                         CustomerConstant.STATUS_200,
                         CustomerConstant.MESSAGE_CUSTOMER_FETCHED,
                         customer
@@ -40,7 +40,7 @@ public class CustomerController {
     }
 
     @GetMapping
-    public ResponseEntity<ResponseDTO> getAllCustomers() {
+    public ResponseEntity<ApiResponseDTO> getAllCustomers() {
 
         log.info("Received request to fetch all customers");
 
@@ -50,7 +50,7 @@ public class CustomerController {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new ResponseDTO(
+                .body(new ApiResponseDTO(
                         CustomerConstant.STATUS_200,
                         CustomerConstant.MESSAGE_CUSTOMERS_FETCHED,
                         customers
@@ -58,7 +58,7 @@ public class CustomerController {
     }
 
     @GetMapping("/city")
-    public ResponseEntity<ResponseDTO> getCustomersByCity(@RequestParam String city) {
+    public ResponseEntity<ApiResponseDTO> getCustomersByCity(@RequestParam String city) {
 
         log.info("Received request to fetch customers by city. city={}", city);
 
@@ -68,7 +68,7 @@ public class CustomerController {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new ResponseDTO(
+                .body(new ApiResponseDTO(
                         CustomerConstant.STATUS_200,
                         CustomerConstant.MESSAGE_CUSTOMERS_FETCHED_BY_CITY,
                         customersByCity
@@ -76,7 +76,7 @@ public class CustomerController {
     }
 
     @GetMapping("/{customerId}/address-count")
-    public ResponseEntity<ResponseDTO> getAddressCount(@PathVariable Integer customerId) {
+    public ResponseEntity<ApiResponseDTO> getAddressCount(@PathVariable Integer customerId) {
 
         log.info("Received request to fetch address count for customer. customerId={}", customerId);
 
@@ -86,7 +86,7 @@ public class CustomerController {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new ResponseDTO(
+                .body(new ApiResponseDTO(
                         CustomerConstant.STATUS_200,
                         CustomerConstant.MESSAGE_ADDRESS_COUNT_FETCHED,
                         addressCount
@@ -94,7 +94,7 @@ public class CustomerController {
     }
 
     @GetMapping("/{customerId}/analytics")
-    public ResponseEntity<ResponseDTO> getCustomerAnalytics(@PathVariable Integer customerId) {
+    public ResponseEntity<ApiResponseDTO> getCustomerAnalytics(@PathVariable Integer customerId) {
 
         log.info("Received request to fetch customer analytics. customerId={}", customerId);
 
@@ -104,7 +104,7 @@ public class CustomerController {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new ResponseDTO(
+                .body(new ApiResponseDTO(
                         CustomerConstant.STATUS_200,
                         CustomerConstant.MESSAGE_CUSTOMER_ANALYTICS_FETCHED,
                         analytics

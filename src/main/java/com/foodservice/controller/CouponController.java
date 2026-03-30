@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.foodservice.entity.dto.OrderCouponDTO;
-import com.foodservice.entity.dto.ResponseDTO;
+import com.foodservice.entity.dto.ApiResponseDTO;
 import com.foodservice.service.CouponService;
 
 @RestController
@@ -20,12 +20,12 @@ public class CouponController {
     }
 
     @GetMapping("/order/{id}")
-    public ResponseEntity<ResponseDTO> getCoupons(@PathVariable Integer id) {
+    public ResponseEntity<ApiResponseDTO> getCoupons(@PathVariable Integer id) {
 
         List<OrderCouponDTO> coupons = couponService.getCouponsByOrder(id);
 
         return ResponseEntity.ok(
-            new ResponseDTO(
+            new ApiResponseDTO(
                 200,
                 "Coupons fetched successfully",
                 coupons

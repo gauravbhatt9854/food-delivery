@@ -26,17 +26,17 @@ public class Order {
     @Column(name = "order_status")
     private String orderStatus;
     
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "customer_id", referencedColumnName = "customer_id", insertable = false, updatable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id", referencedColumnName = "customer_id")
     private Customer customer;
 
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "restaurant_id", referencedColumnName = "restaurant_id", insertable = false, updatable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "restaurant_id", referencedColumnName = "restaurant_id")
     private Restaurant restaurant;
     
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "delivery_driver_id", referencedColumnName = "driver_id", insertable = false, updatable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "delivery_driver_id", referencedColumnName = "driver_id")
     private DeliveryDriver deliveryDriver;
 
 }

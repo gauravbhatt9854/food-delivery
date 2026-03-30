@@ -21,6 +21,7 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -88,7 +89,7 @@ class OrderControllerTest {
         mockMvc.perform(get("/api/v1/orders/customer/{customerId}", 1))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.statusCode").value(200))
+                .andExpect(jsonPath("$.status").value(200))
                 .andExpect(jsonPath("$.message").value("customer having id: 1 has 1 order"))
                 .andExpect(jsonPath("$.data").exists())
                 .andExpect(jsonPath("$.data.customer.customerId").value(1))
@@ -105,10 +106,9 @@ class OrderControllerTest {
                 .thenThrow(new OrderInvalidRequestException("Customer do next exist having customer id: 999"));
 
         mockMvc.perform(get("/api/v1/orders/customer/{customerId}", 999))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.errorCode").value("NOT_FOUND"))
-                .andExpect(jsonPath("$.errorMessage").exists());
+                .andExpect(jsonPath("$.status").value(404));
     }
 
     @Test
@@ -120,7 +120,7 @@ class OrderControllerTest {
         mockMvc.perform(get("/api/v1/orders/customer/{customerId}", 1))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.statusCode").value(200))
+                .andExpect(jsonPath("$.status").value(200))
                 .andExpect(jsonPath("$.message").value("customer having id: 1 has 0 order"))
                 .andExpect(jsonPath("$.data.customer.customerId").value(1))
                 .andExpect(jsonPath("$.data.orderItems").isArray())
@@ -134,10 +134,9 @@ class OrderControllerTest {
                 .thenThrow(new OrderInvalidRequestException("Customer do next exist having customer id: 0"));
 
         mockMvc.perform(get("/api/v1/orders/customer/{customerId}", 0))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.errorCode").value("NOT_FOUND"))
-                .andExpect(jsonPath("$.errorMessage").exists());
+                .andExpect(jsonPath("$.status").value(404));
     }
 
     @Test
@@ -147,10 +146,9 @@ class OrderControllerTest {
                 .thenThrow(new OrderInvalidRequestException("Customer do next exist having customer id: -1"));
 
         mockMvc.perform(get("/api/v1/orders/customer/{customerId}", -1))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.errorCode").value("NOT_FOUND"))
-                .andExpect(jsonPath("$.errorMessage").exists());
+                .andExpect(jsonPath("$.status").value(404));
     }
 
     @Test
@@ -161,7 +159,7 @@ class OrderControllerTest {
         mockMvc.perform(get("/api/v1/orders/detail/{orderId}", 1))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.statusCode").value(200))
+                .andExpect(jsonPath("$.status").value(200))
                 .andExpect(jsonPath("$.message").value("order detail having id: 1"))
                 .andExpect(jsonPath("$.data").exists())
                 .andExpect(jsonPath("$.data.customer.customerName").value("John Doe"))
@@ -180,10 +178,9 @@ class OrderControllerTest {
                 .thenThrow(new OrderInvalidRequestException("Order not found having order id: 999"));
 
         mockMvc.perform(get("/api/v1/orders/detail/{orderId}", 999))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.errorCode").value("NOT_FOUND"))
-                .andExpect(jsonPath("$.errorMessage").exists());
+                .andExpect(jsonPath("$.status").value(404));
     }
 
     @Test
@@ -193,10 +190,9 @@ class OrderControllerTest {
                 .thenThrow(new OrderInvalidRequestException("Order not found having order id: 0"));
 
         mockMvc.perform(get("/api/v1/orders/detail/{orderId}", 0))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.errorCode").value("NOT_FOUND"))
-                .andExpect(jsonPath("$.errorMessage").exists());
+                .andExpect(jsonPath("$.status").value(404));
     }
 
     @Test
@@ -206,10 +202,9 @@ class OrderControllerTest {
                 .thenThrow(new OrderInvalidRequestException("Order not found having order id: -1"));
 
         mockMvc.perform(get("/api/v1/orders/detail/{orderId}", -1))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.errorCode").value("NOT_FOUND"))
-                .andExpect(jsonPath("$.errorMessage").exists());
+                .andExpect(jsonPath("$.status").value(404));
     }
 
     @Test
@@ -227,7 +222,7 @@ class OrderControllerTest {
         mockMvc.perform(get("/api/v1/orders/detail/{orderId}", 1))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.statusCode").value(200))
+                .andExpect(jsonPath("$.status").value(200))
                 .andExpect(jsonPath("$.message").value("order detail having id: 1"))
                 .andExpect(jsonPath("$.data").exists())
                 .andExpect(jsonPath("$.data.orderItems").isArray())

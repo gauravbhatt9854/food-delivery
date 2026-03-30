@@ -1,8 +1,8 @@
 package com.foodservice.controller;
 
 import com.foodservice.constants.RestaurantConstants;
+import com.foodservice.entity.dto.ApiResponseDTO;
 import com.foodservice.entity.dto.RatingResponseDTO;
-import com.foodservice.entity.dto.ResponseDTO;
 import com.foodservice.entity.dto.RestaurantResponseDTO;
 import com.foodservice.service.RestaurantService;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ public class RestaurantController {
     private final RestaurantService restaurantService;
 
     @GetMapping("/fetch")
-    public ResponseEntity<ResponseDTO> fetchRestaurants(
+    public ResponseEntity<ApiResponseDTO> fetchRestaurants(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
 
@@ -34,11 +34,11 @@ public class RestaurantController {
         log.info("Fetched {} restaurants", restaurantList.getNumberOfElements());
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new ResponseDTO(RestaurantConstants.STATUS_200, RestaurantConstants.MESSAGE_210, restaurantList));
+                .body(new ApiResponseDTO(RestaurantConstants.STATUS_200, RestaurantConstants.MESSAGE_210, restaurantList));
     }
 
     @GetMapping("/{id}/ratings")
-    public ResponseEntity<ResponseDTO> fetchRestaurantRatings(
+    public ResponseEntity<ApiResponseDTO> fetchRestaurantRatings(
             @PathVariable("id") Integer restaurantId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size){
@@ -49,6 +49,6 @@ public class RestaurantController {
 
         log.info("Fetched {} ratings for restaurant ID: {}", ratingsList.getNumberOfElements(), restaurantId);
         return ResponseEntity.status(HttpStatus.OK)
-                    .body(new ResponseDTO(RestaurantConstants.STATUS_200,RestaurantConstants.MESSAGE_210,ratingsList));
+                    .body(new ApiResponseDTO(RestaurantConstants.STATUS_200,RestaurantConstants.MESSAGE_210,ratingsList));
     }
 }

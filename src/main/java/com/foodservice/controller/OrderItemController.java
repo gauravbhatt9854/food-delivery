@@ -1,7 +1,7 @@
 package com.foodservice.controller;
 
 import com.foodservice.entity.dto.OrderItemDTO;
-import com.foodservice.entity.dto.ResponseDTO;
+import com.foodservice.entity.dto.ApiResponseDTO;
 
 import com.foodservice.service.OrderItemService;
 
@@ -22,13 +22,13 @@ public class OrderItemController {
     private final OrderItemService orderItemService;
 
     @GetMapping("/{orderItemId}")
-    public ResponseEntity<ResponseDTO> getOrderItemDetailsById(@PathVariable Integer orderItemId) {
+    public ResponseEntity<ApiResponseDTO> getOrderItemDetailsById(@PathVariable Integer orderItemId) {
 
         OrderItemDTO orderItemDTO = orderItemService.getOrderItemById(orderItemId);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new ResponseDTO(200, "order item detail having id: " + orderItemId, orderItemDTO));
+                .body(new ApiResponseDTO(200, "order item detail having id: " + orderItemId, orderItemDTO));
     }
 
 }

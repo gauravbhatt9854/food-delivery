@@ -2,7 +2,7 @@ package com.foodservice.controller;
 
 import com.foodservice.constants.RestaurantConstants;
 import com.foodservice.entity.dto.MenuItemResponseDTO;
-import com.foodservice.entity.dto.ResponseDTO;
+import com.foodservice.entity.dto.ApiResponseDTO;
 import com.foodservice.service.MenuItemService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,7 @@ public class MenuItemController {
     private final MenuItemService menuItemService;
 
     @GetMapping("/fetchByRestaurant/{restaurantId}")
-    public ResponseEntity<ResponseDTO> fetchMenuByRestaurantId(
+    public ResponseEntity<ApiResponseDTO> fetchMenuByRestaurantId(
             @PathVariable Integer restaurantId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
@@ -32,6 +32,6 @@ public class MenuItemController {
         log.info("Fetched {} menu items for restaurant ID: {}", menuList.getNumberOfElements(), restaurantId);
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new ResponseDTO(RestaurantConstants.STATUS_200, RestaurantConstants.MESSAGE_210, menuList));
+                .body(new ApiResponseDTO(RestaurantConstants.STATUS_200, RestaurantConstants.MESSAGE_210, menuList));
     }
 }

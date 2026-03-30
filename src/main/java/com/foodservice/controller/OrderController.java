@@ -2,7 +2,7 @@ package com.foodservice.controller;
 
 import com.foodservice.entity.dto.OrderCustomerDTO;
 import com.foodservice.entity.dto.OrderWithItemDTO;
-import com.foodservice.entity.dto.ResponseDTO;
+import com.foodservice.entity.dto.ApiResponseDTO;
 
 import com.foodservice.service.OrderService;
 
@@ -22,20 +22,20 @@ public class OrderController {
     private final OrderService orderService;
 
     @GetMapping("/customer/{customerId}")
-    public ResponseEntity<ResponseDTO> getOrdersByCustomerId(@PathVariable Integer customerId) {
+    public ResponseEntity<ApiResponseDTO> getOrdersByCustomerId(@PathVariable Integer customerId) {
         OrderCustomerDTO orderDTO = orderService.getOrdersByCustomerId(customerId);
         
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new ResponseDTO(200, "customer having id: "+customerId+" has " + orderDTO.getOrderItems().size() + " order", orderDTO));
+                .body(new ApiResponseDTO(200, "customer having id: "+customerId+" has " + orderDTO.getOrderItems().size() + " order", orderDTO));
     }
 
     @GetMapping("/detail/{orderId}")
-    public ResponseEntity<ResponseDTO> getOrderDetailsById(@PathVariable Integer orderId) {
+    public ResponseEntity<ApiResponseDTO> getOrderDetailsById(@PathVariable Integer orderId) {
         OrderWithItemDTO orderWithItemDTO = orderService.getOrderDetailsById(orderId);
 
         return ResponseEntity
                 .status(200)
-                .body(new ResponseDTO(200, "order detail having id: " + orderId, orderWithItemDTO));
+                .body(new ApiResponseDTO(200, "order detail having id: " + orderId, orderWithItemDTO));
     }
 }
