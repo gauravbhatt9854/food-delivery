@@ -2,20 +2,8 @@ package com.foodservice.config;
 
 import java.math.BigDecimal;
 
-import com.foodservice.entity.Coupon;
-import com.foodservice.entity.Customer;
-import com.foodservice.entity.DeliveryAddress;
-import com.foodservice.entity.MenuItem;
-import com.foodservice.entity.Order;
-import com.foodservice.entity.Restaurant;
-import com.foodservice.entity.dto.CustomerDTO;
-import com.foodservice.entity.dto.DeliveryAddressDTO;
-import com.foodservice.entity.dto.DeliveryDriverDTO;
-import com.foodservice.entity.dto.MenuItemRequestDTO;
-import com.foodservice.entity.dto.MenuItemResponseDTO;
-import com.foodservice.entity.dto.OrderDTO;
-import com.foodservice.entity.dto.RestaurantRequestDTO;
-import com.foodservice.entity.dto.RestaurantResponseDTO;
+import com.foodservice.entity.*;
+import com.foodservice.entity.dto.*;
 
 public class CustomMapper {
 
@@ -125,5 +113,29 @@ public class CustomMapper {
 
         return address;
     }
-    
+
+    public static RatingResponseDTO toRatingDto(Rating entity) {
+        if (entity == null) {
+            return null;
+        }
+
+        RatingResponseDTO dto = new RatingResponseDTO();
+        dto.setRating(entity.getRating());
+        dto.setReview(entity.getReview());
+
+        if (entity.getRestaurant() != null) {
+            dto.setRestaurantName(entity.getRestaurant().getRestaurantName());
+        }
+
+        if (entity.getOrder() != null) {
+            dto.setOrderDate(entity.getOrder().getOrderDate());
+
+            if (entity.getOrder().getCustomer() != null) {
+                dto.setCustomerName(entity.getOrder().getCustomer().getCustomerName());
+            }
+        }
+
+        return dto;
+    }
+
 }
