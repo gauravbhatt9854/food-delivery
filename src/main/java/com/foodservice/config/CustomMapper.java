@@ -1,7 +1,9 @@
 package com.foodservice.config;
 
-import com.foodservice.entity.dto.*;
+import java.math.BigDecimal;
+
 import com.foodservice.entity.*;
+import com.foodservice.entity.dto.*;
 
 import java.util.List;
 
@@ -140,6 +142,30 @@ public class CustomMapper {
         address.setPostalCode(dto.getPostalCode());
 
         return address;
+    }
+
+    public static RatingResponseDTO toRatingDto(Rating entity) {
+        if (entity == null) {
+            return null;
+        }
+
+        RatingResponseDTO dto = new RatingResponseDTO();
+        dto.setRating(entity.getRating());
+        dto.setReview(entity.getReview());
+
+        if (entity.getRestaurant() != null) {
+            dto.setRestaurantName(entity.getRestaurant().getRestaurantName());
+        }
+
+        if (entity.getOrder() != null) {
+            dto.setOrderDate(entity.getOrder().getOrderDate());
+
+            if (entity.getOrder().getCustomer() != null) {
+                dto.setCustomerName(entity.getOrder().getCustomer().getCustomerName());
+            }
+        }
+
+        return dto;
     }
 
     public static DeliveryDriverDTO deliveryDriverTODeliveryDriverDTO (DeliveryDriver deliveryDriver, DeliveryDriverDTO deliveryDriverDTO) {
