@@ -18,14 +18,14 @@ import java.util.List;
 @Slf4j
 public class DeliveryAddressController {
 
-    private final DeliveryAddressService service;
+    private final DeliveryAddressService deliveryAddressService;
 
     @GetMapping("/customers/{customerId}/addresses")
     public ResponseEntity<ResponseDTO> getAddressesByCustomerId(@PathVariable Integer customerId) {
 
         log.info("Received request to fetch delivery addresses for customer. customerId={}", customerId);
 
-        List<DeliveryAddressDTO> addresses = service.getAddressesByCustomerId(customerId);
+        List<DeliveryAddressDTO> addresses = deliveryAddressService.getAddressesByCustomerId(customerId);
 
         log.debug("Successfully fetched delivery addresses. customerId={}, totalAddressesCount={}", customerId, addresses.size());
 
@@ -43,7 +43,7 @@ public class DeliveryAddressController {
 
         log.info("Received request to fetch delivery address details. addressId={}", addressId);
 
-        DeliveryAddressDTO address = service.getAddressById(addressId);
+        DeliveryAddressDTO address = deliveryAddressService.getAddressById(addressId);
 
         log.debug("Successfully fetched delivery address details. addressId={}, addressData={}", addressId, address);
 
@@ -61,7 +61,7 @@ public class DeliveryAddressController {
 
         log.info("Received request to fetch address count for customer. customerId={}", customerId);
 
-        Integer addressCount = service.getAddressCount(customerId);
+        Integer addressCount = deliveryAddressService.getAddressCount(customerId);
 
         log.debug("Successfully fetched address count. customerId={}, addressCount={}", customerId, addressCount);
 
@@ -79,7 +79,7 @@ public class DeliveryAddressController {
 
         log.info("Received request to fetch delivery addresses by city. city={}", city);
 
-        List<DeliveryAddressDTO> addressesByCity = service.getAddressesByCity(city);
+        List<DeliveryAddressDTO> addressesByCity = deliveryAddressService.getAddressesByCity(city);
 
         log.debug("Successfully fetched delivery addresses by city. city={}, resultCount={}", city, addressesByCity.size());
 
@@ -97,7 +97,7 @@ public class DeliveryAddressController {
 
         log.info("Received request to fetch default delivery address. customerId={}", customerId);
 
-        DeliveryAddressDTO defaultAddress = service.getDefaultAddress(customerId);
+        DeliveryAddressDTO defaultAddress = deliveryAddressService.getDefaultAddress(customerId);
 
         log.debug("Successfully fetched default delivery address. customerId={}, addressData={}", customerId, defaultAddress);
 

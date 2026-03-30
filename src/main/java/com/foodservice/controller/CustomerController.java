@@ -19,14 +19,14 @@ import java.util.List;
 @Slf4j
 public class CustomerController {
 
-    private final CustomerService service;
+    private final CustomerService customerService;
 
     @GetMapping("/{customerId}")
     public ResponseEntity<ResponseDTO> getCustomerById(@PathVariable Integer customerId) {
 
         log.info("Received request to fetch customer details. customerId={}", customerId);
 
-        CustomerDTO customer = service.getCustomerById(customerId);
+        CustomerDTO customer = customerService.getCustomerById(customerId);
 
         log.debug("Successfully fetched customer details. customerId={}, customerData={}", customerId, customer);
 
@@ -44,7 +44,7 @@ public class CustomerController {
 
         log.info("Received request to fetch all customers");
 
-        List<CustomerDTO> customers = service.getAllCustomers();
+        List<CustomerDTO> customers = customerService.getAllCustomers();
 
         log.debug("Successfully fetched all customers. totalCustomersCount={}", customers.size());
 
@@ -62,7 +62,7 @@ public class CustomerController {
 
         log.info("Received request to fetch customers by city. city={}", city);
 
-        List<CustomerDTO> customersByCity = service.getCustomersByCity(city);
+        List<CustomerDTO> customersByCity = customerService.getCustomersByCity(city);
 
         log.debug("Successfully fetched customers by city. city={}, resultCount={}", city, customersByCity.size());
 
@@ -80,7 +80,7 @@ public class CustomerController {
 
         log.info("Received request to fetch address count for customer. customerId={}", customerId);
 
-        Integer addressCount = service.getAddressCount(customerId);
+        Integer addressCount = customerService.getAddressCount(customerId);
 
         log.debug("Successfully fetched address count. customerId={}, addressCount={}", customerId, addressCount);
 
@@ -98,7 +98,7 @@ public class CustomerController {
 
         log.info("Received request to fetch customer analytics. customerId={}", customerId);
 
-        CustomerAnalyticsDTO analytics = service.getCustomerAnalytics(customerId);
+        CustomerAnalyticsDTO analytics = customerService.getCustomerAnalytics(customerId);
 
         log.debug("Successfully fetched customer analytics. customerId={}, analyticsData={}", customerId, analytics);
 
