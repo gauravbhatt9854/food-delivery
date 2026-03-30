@@ -1,5 +1,6 @@
 package com.foodservice.exception;
 import com.foodservice.entity.dto.ErrorResponseDTO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -9,6 +10,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 import java.time.LocalDateTime;
 
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(OrderInvalidRequestException.class)
@@ -37,17 +39,30 @@ public class GlobalExceptionHandler {
 
     }
 
-    // Resource Not Found (404)
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorResponseDTO> handleResourceNotFoundException(
             ResourceNotFoundException ex,
             WebRequest webRequest) {
+
+        log.error(
+                "ResourceNotFoundException occurred while processing request. path={}, errorMessage={}, exceptionClass={}",
+                webRequest.getDescription(false),
+                ex.getMessage(),
+                ex.getClass().getSimpleName(),
+                ex
+        );
 
         ErrorResponseDTO errorResponse = new ErrorResponseDTO(
                 LocalDateTime.now(),
                 webRequest.getDescription(false),
                 HttpStatus.NOT_FOUND,
                 ex.getMessage()
+        );
+
+        log.debug(
+                "Returning error response for ResourceNotFoundException. status={}, responseBody={}",
+                HttpStatus.NOT_FOUND,
+                errorResponse
         );
 
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);

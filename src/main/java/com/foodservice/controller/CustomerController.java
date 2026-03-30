@@ -1,72 +1,113 @@
 package com.foodservice.controller;
 
+import com.foodservice.entity.dto.CustomerAnalyticsDTO;
+import com.foodservice.entity.dto.CustomerDTO;
 import com.foodservice.entity.dto.ResponseDTO;
 import com.foodservice.service.CustomerService;
 import com.foodservice.constants.CustomerConstant;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/customers")
 @RequiredArgsConstructor
+@Slf4j
 public class CustomerController {
 
     private final CustomerService service;
 
     @GetMapping("/{customerId}")
     public ResponseEntity<ResponseDTO> getCustomerById(@PathVariable Integer customerId) {
+
+        log.info("Received request to fetch customer details. customerId={}", customerId);
+
+        CustomerDTO customer = service.getCustomerById(customerId);
+
+        log.debug("Successfully fetched customer details. customerId={}, customerData={}", customerId, customer);
+
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ResponseDTO(
                         CustomerConstant.STATUS_200,
                         CustomerConstant.MESSAGE_CUSTOMER_FETCHED,
-                        service.getCustomerById(customerId)
+                        customer
                 ));
     }
 
     @GetMapping
     public ResponseEntity<ResponseDTO> getAllCustomers() {
+
+        log.info("Received request to fetch all customers");
+
+        List<CustomerDTO> customers = service.getAllCustomers();
+
+        log.debug("Successfully fetched all customers. totalCustomersCount={}", customers.size());
+
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ResponseDTO(
                         CustomerConstant.STATUS_200,
                         CustomerConstant.MESSAGE_CUSTOMERS_FETCHED,
-                        service.getAllCustomers()
+                        customers
                 ));
     }
 
     @GetMapping("/city")
     public ResponseEntity<ResponseDTO> getCustomersByCity(@RequestParam String city) {
+
+        log.info("Received request to fetch customers by city. city={}", city);
+
+        List<CustomerDTO> customersByCity = service.getCustomersByCity(city);
+
+        log.debug("Successfully fetched customers by city. city={}, resultCount={}", city, customersByCity.size());
+
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ResponseDTO(
                         CustomerConstant.STATUS_200,
                         CustomerConstant.MESSAGE_CUSTOMERS_FETCHED_BY_CITY,
-                        service.getCustomersByCity(city)
+                        customersByCity
                 ));
     }
 
     @GetMapping("/{customerId}/address-count")
     public ResponseEntity<ResponseDTO> getAddressCount(@PathVariable Integer customerId) {
+
+        log.info("Received request to fetch address count for customer. customerId={}", customerId);
+
+        Integer addressCount = service.getAddressCount(customerId);
+
+        log.debug("Successfully fetched address count. customerId={}, addressCount={}", customerId, addressCount);
+
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ResponseDTO(
                         CustomerConstant.STATUS_200,
                         CustomerConstant.MESSAGE_ADDRESS_COUNT_FETCHED,
-                        service.getAddressCount(customerId)
+                        addressCount
                 ));
     }
 
     @GetMapping("/{customerId}/analytics")
     public ResponseEntity<ResponseDTO> getCustomerAnalytics(@PathVariable Integer customerId) {
+
+        log.info("Received request to fetch customer analytics. customerId={}", customerId);
+
+        CustomerAnalyticsDTO analytics = service.getCustomerAnalytics(customerId);
+
+        log.debug("Successfully fetched customer analytics. customerId={}, analyticsData={}", customerId, analytics);
+
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ResponseDTO(
                         CustomerConstant.STATUS_200,
                         CustomerConstant.MESSAGE_CUSTOMER_ANALYTICS_FETCHED,
-                        service.getCustomerAnalytics(customerId)
+                        analytics
                 ));
     }
 }
