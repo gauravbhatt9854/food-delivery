@@ -17,18 +17,11 @@ import java.util.List;
 public class DeliveryDriverController {
 
     private final DeliveryDriverService deliveryDriverservice;
-    
-    public DeliveryDriverController(DeliveryDriverService deliveryDriverservice) {
-        this.deliveryDriverservice = deliveryDriverservice;
-    }
 
     // ---------------- Get Driver by ID --------------
     @GetMapping(value = "/{driverId}", produces = "application/json")
     public ResponseEntity<ResponseDTO> getDriverById(@PathVariable Integer driverId) {
-
-        DeliveryDriverResponseDTO driver =
-        		deliveryDriverservice.getDriverById(driverId);
-
+        DeliveryDriverResponseDTO driver = deliveryDriverservice.getDriverById(driverId);
         return ResponseEntity.ok(
                 new ResponseDTO(200, "Driver fetched successfully", driver)
         );
@@ -37,10 +30,7 @@ public class DeliveryDriverController {
     // ---------- Get All Drivers ------------
     @GetMapping(produces = "application/json")
     public ResponseEntity<ResponseDTO> getAllDrivers() {
-
-        List<DeliveryDriverResponseDTO> drivers =
-                deliveryDriverservice.getAllDrivers();
-
+        List<DeliveryDriverResponseDTO> drivers = deliveryDriverservice.getAllDrivers();
         return ResponseEntity
                 .ok()
                 .header("Content-Type", "application/json")
@@ -50,10 +40,7 @@ public class DeliveryDriverController {
     // --------------- Get Driver Deliveries ----------------
     @GetMapping("/{driverId}/deliveries")
     public ResponseEntity<ResponseDTO> getDriverDeliveries(@PathVariable Integer driverId) {
-
-    	
         List<DeliveryDriverResponseDTO> list = deliveryDriverservice.getDriverDeliveries(driverId);
-
         return ResponseEntity.ok(
             new ResponseDTO(200, "Driver deliveries fetched", list)
         );
