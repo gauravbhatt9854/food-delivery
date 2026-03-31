@@ -33,6 +33,30 @@ public class GlobalExceptionHandler {
 
     }
 
+    @ExceptionHandler(RestaurantNotFoundException.class)
+    public ResponseEntity<ApiResponseDTO> handleRestaurantNotFoundException(RestaurantNotFoundException ex){
+        log.warn("Restaurant not found: {}", ex.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(new ApiResponseDTO(HttpStatus.NOT_FOUND.value(),ex.getMessage(),null));
+    }
+
+    @ExceptionHandler(MenuItemNotFoundException.class)
+    public ResponseEntity<ApiResponseDTO> handleMenuItemNotFoundException(MenuItemNotFoundException ex) {
+        log.warn("Menu item not found: {}", ex.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(new ApiResponseDTO(HttpStatus.NOT_FOUND.value(), ex.getMessage(), null));
+    }
+
+    @ExceptionHandler(RestaurantInvalidRequestException.class)
+    public ResponseEntity<ApiResponseDTO> handleRestaurantInvalidRequestException(RestaurantInvalidRequestException ex) {
+        log.warn("Invalid restaurant request: {}", ex.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new ApiResponseDTO(HttpStatus.BAD_REQUEST.value(), ex.getMessage(), null));
+    }
+
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ApiResponseDTO> handleResourceNotFoundException(ResourceNotFoundException ex) {
 

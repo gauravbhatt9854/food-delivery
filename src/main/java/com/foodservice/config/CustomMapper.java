@@ -53,13 +53,13 @@ public class CustomMapper {
 
     public static MenuItemResponseDTO toMenuItemDto(MenuItem entity) {
         MenuItemResponseDTO menuItemResponseDTO = new MenuItemResponseDTO();
-//        menuItemResponseDTO.setItemId(entity.getItemId());
+        menuItemResponseDTO.setItemId(entity.getItemId());
         menuItemResponseDTO.setItemName(entity.getItemName());
         menuItemResponseDTO.setItemDescription(entity.getItemDescription());
         menuItemResponseDTO.setItemPrice(entity.getItemPrice());
-//        if (entity.getRestaurant() != null) {
-//            menuItemResponseDTO.setRestaurantId(entity.getRestaurant().getRestaurantId());
-//        }
+        if (entity.getRestaurant() != null) {
+            menuItemResponseDTO.setRestaurantId(entity.getRestaurant().getRestaurantId());
+        }
         return menuItemResponseDTO;
     }
 
@@ -167,5 +167,5 @@ public class CustomMapper {
         return deliveryDriverDTO;
     }
 
-    
+
 }

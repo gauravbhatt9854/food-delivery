@@ -1,5 +1,6 @@
 package com.foodservice.controller;
 
+import com.foodservice.constants.MenuItemConstant;
 import com.foodservice.entity.dto.ApiResponseDTO;
 import com.foodservice.entity.dto.MenuItemResponseDTO;
 import com.foodservice.service.MenuItemService;
@@ -30,6 +31,9 @@ public class MenuItemController {
         log.info("Fetched {} menu items for restaurant ID: {}", menuList.getNumberOfElements(), restaurantId);
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new ApiResponseDTO(200, "restaurant having id: " + restaurantId + " has " + menuList.getNumberOfElements() + " menu items", menuList));
+                .body(new ApiResponseDTO(
+                        MenuItemConstant.STATUS_200,
+                        MenuItemConstant.MESSAGE_MENU_FETCHED,
+                        menuList));
     }
 }
