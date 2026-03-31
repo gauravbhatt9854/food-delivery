@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
@@ -22,7 +23,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(OrderItemController.class)
+@WebMvcTest(controllers = OrderItemController.class, excludeAutoConfiguration = {
+    org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class,
+    org.springframework.boot.autoconfigure.security.servlet.SecurityFilterAutoConfiguration.class,
+    org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration.class,
+    org.springframework.boot.autoconfigure.security.oauth2.client.servlet.OAuth2ClientWebSecurityAutoConfiguration.class,
+    org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientAutoConfiguration.class,
+    org.springframework.boot.autoconfigure.security.oauth2.resource.servlet.OAuth2ResourceServerAutoConfiguration.class,
+    org.springframework.boot.autoconfigure.security.saml2.Saml2RelyingPartyAutoConfiguration.class
+})
+@TestPropertySource(properties = {
+    "jwt.secret=testSecretKey12345678901234567890123456789012345678901234567890",
+    "jwt.expiration=86400000"
+})
 @DisplayName("Order Item Controller Tests")
 class OrderItemControllerTest {
 
@@ -31,6 +44,12 @@ class OrderItemControllerTest {
 
     @MockBean
     private OrderItemService orderItemService;
+
+    @MockBean
+    private com.foodservice.security.JwtService jwtService;
+
+    @MockBean
+    private com.foodservice.service.impl.UserDetailsServiceImpl userDetailsService;
 
     @Autowired
     private ObjectMapper objectMapper;
