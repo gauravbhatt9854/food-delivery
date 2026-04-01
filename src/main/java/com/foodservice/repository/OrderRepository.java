@@ -46,8 +46,8 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     JOIN io.menuItem mi
     WHERE io.order.orderId = :orderId
 """)
-    List<OrderItemDetailDTO> getOrderDetailsByOrderId(@Param("orderId") Integer orderId);
+    List<ItemWithQuantity> getOrderItemWithQuantityById(@Param("orderId") Integer orderId);
     List<Order> findByDeliveryDriverDriverId(Integer driverId);
 
-    List<ItemWithQuantity> getOrderItemWithQuantityById(@Param("orderId") Integer orderId);
+
 }

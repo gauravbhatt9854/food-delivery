@@ -3,6 +3,7 @@ package com.foodservice.security;
 import com.foodservice.service.impl.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -30,19 +31,23 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
-        final String authHeader = request.getHeader("Authorization");
+        String token = null;
 
-        // No token — skip, let Spring Security handle it (will return 401)
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            filterChain.doFilter(request, response);
-            return;
+        Cookie[] cookies = request.getCookies();
+        if(cookies != null){
+            for(Cookie cookie: cookies){
+                if (cookie.getName().equals("token")) {
+                    token = cookie.getValue();
+                }
+            }
         }
 
-        final String token = authHeader.substring(7);
-        final String username;
+        String username = null;
 
         try {
+            if(token != null){
             username = jwtService.extractUsername(token);
+            }
         } catch (Exception e) {
             // Malformed or tampered token
             log.warn("Invalid JWT token: {}", e.getMessage());
