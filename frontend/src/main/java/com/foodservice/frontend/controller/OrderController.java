@@ -32,12 +32,12 @@ public class OrderController {
     public String getOrdersByCustomerId(@PathVariable("customerId") Integer customerId,
                                         Model model,
                                         @RequestParam Map<String, String> params,
-                                        @CookieValue(name = "token", required = true) String token
-    ) {
+                                        @CookieValue(name = "token", required = true) String token) {
 
         OrderCustomerDTO orderCustomerDTO = orderService.getOrdersByCustomerId(customerId, params, token);
 
         model.addAttribute("orderCustomerDTO", orderCustomerDTO);
+
         return "pages/orders";
     }
 
@@ -45,8 +45,8 @@ public class OrderController {
     public String getOrderDetailsById(@PathVariable("orderId") Integer orderId,
                                      Model model,
                                      @RequestParam Map<String, String> params,
-                                     @CookieValue(name = "token", required = true) String token)
-    {
+                                     @CookieValue(name = "token", required = true) String token) {
+
         OrderWithItemDTO orderWithItemDTO = orderService.getOrderDetailsById(orderId, params, token);
 
         // Calculate total amount
@@ -58,9 +58,11 @@ public class OrderController {
         return "pages/order-details";
     }
 
-    @GetMapping("/**")
-    public String getSearchPage(Model model) {
+    @GetMapping("/detail")
+    public String getSearchPage(Model model, @CookieValue(name = "token", required = true) String token) {
+
         model.addAttribute("title", "Search");
         return "pages/order-search";
+
     }
 }
