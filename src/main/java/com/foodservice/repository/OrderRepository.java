@@ -3,6 +3,8 @@ package com.foodservice.repository;
 import com.foodservice.entity.Order;
 import com.foodservice.entity.dto.ItemWithQuantity;
 import com.foodservice.entity.dto.OrderItemDetailDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -36,6 +38,28 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 
     @Query("""
     SELECT
+        new com.foodservice.entity.dto.OrderItemDetailDTO(
+            o.orderDate,
+            o.orderStatus,
+            io.quantity,
+            mi.itemName,
+            mi.itemDescription,
+            mi.itemPrice,
+            r.restaurantName,
+            r.restaurantAddress,
+            r.restaurantPhone
+        )
+    FROM OrderItem io
+    JOIN io.order o
+    JOIN io.menuItem mi
+    JOIN mi.restaurant r
+    WHERE o.customer.customerId = :customerId
+    AND (:status IS NULL OR o.orderStatus = :status)
+""")
+    Page<OrderItemDetailDTO> getOrderDetailsByCustomerId(@Param("customerId") Integer customerId, Pageable pageable, @Param("status") String status);
+
+    @Query("""
+    SELECT
         new com.foodservice.entity.dto.ItemWithQuantity(
             io.quantity,
             mi.itemName,
@@ -47,6 +71,7 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     WHERE io.order.orderId = :orderId
 """)
     List<ItemWithQuantity> getOrderItemWithQuantityById(@Param("orderId") Integer orderId);
+
     List<Order> findByDeliveryDriverDriverId(Integer driverId);
 
 

@@ -19,7 +19,10 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import org.springframework.data.domain.PageImpl;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -57,7 +60,7 @@ class OrderControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private OrderCustomerDTO mockOrderCustomerDTO;
+    private OrderCustomerPageDTO mockOrderCustomerPageDTO;
     private OrderWithItemDTO mockOrderWithItemDTO;
     private Customer mockCustomer;
 
@@ -79,11 +82,15 @@ class OrderControllerTest {
         orderItemDetail.setRestaurantAddress("123 Main St");
         orderItemDetail.setRestaurantPhone("555-0123");
 
-        mockOrderCustomerDTO = new OrderCustomerDTO(mockCustomer, List.of(orderItemDetail));
-
         CustomerDTO customerDTO = new CustomerDTO();
         customerDTO.setCustomerName("John Doe");
         customerDTO.setCustomerEmail("john.doe@example.com");
+        
+        mockOrderCustomerPageDTO = new OrderCustomerPageDTO(customerDTO, new PageImpl<>(List.of(orderItemDetail)));
+
+        CustomerDTO customerDTO2 = new CustomerDTO();
+        customerDTO2.setCustomerName("John Doe");
+        customerDTO2.setCustomerEmail("john.doe@example.com");
 
         RestaurantResponseDTO restaurantDTO = new RestaurantResponseDTO();
         restaurantDTO.setRestaurantName("Pizza Palace");
@@ -103,71 +110,79 @@ class OrderControllerTest {
     @Test
     @DisplayName("GET /api/v1/orders/customer/{customerId} - Success")
     void getOrdersByCustomerId_Success() throws Exception {
-        when(orderService.getOrdersByCustomerId(1)).thenReturn(mockOrderCustomerDTO);
+        when(orderService.getOrdersByCustomerId(eq(1), any(), any())).thenReturn(mockOrderCustomerPageDTO);
 
         mockMvc.perform(get("/api/v1/orders/customer/{customerId}", 1))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.status").value(200))
-                .andExpect(jsonPath("$.message").value("customer having id: 1 has 1 order"))
+                .andExpect(jsonPath("$.message").value("customer order details"))
                 .andExpect(jsonPath("$.data").exists())
-                .andExpect(jsonPath("$.data.customer.customerId").value(1))
                 .andExpect(jsonPath("$.data.customer.customerName").value("John Doe"))
-                .andExpect(jsonPath("$.data.orderItems").isArray())
-                .andExpect(jsonPath("$.data.orderItems[0].itemName").value("Pizza"))
-                .andExpect(jsonPath("$.data.orderItems[0].quantity").value(2));
+                .andExpect(jsonPath("$.data.orderDetails.content").isArray())
+                .andExpect(jsonPath("$.data.orderDetails.content[0].itemName").value("Pizza"))
+                .andExpect(jsonPath("$.data.orderDetails.content[0].quantity").value(2));
     }
 
     @Test
     @DisplayName("GET /api/v1/orders/customer/{customerId} - Customer Not Found")
     void getOrdersByCustomerId_CustomerNotFound() throws Exception {
-        when(orderService.getOrdersByCustomerId(999))
+        when(orderService.getOrdersByCustomerId(eq(999), any(), any()))
                 .thenThrow(new OrderInvalidRequestException("Customer do next exist having customer id: 999"));
 
         mockMvc.perform(get("/api/v1/orders/customer/{customerId}", 999))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.status").value(404));
+                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.message").value("404 NOT_FOUND, Customer do next exist having customer id: 999"))
+                .andExpect(jsonPath("$.data").doesNotExist());
     }
 
     @Test
     @DisplayName("GET /api/v1/orders/customer/{customerId} - Empty Order List")
     void getOrdersByCustomerId_EmptyOrderList() throws Exception {
-        OrderCustomerDTO emptyOrderDTO = new OrderCustomerDTO(mockCustomer, Collections.emptyList());
-        when(orderService.getOrdersByCustomerId(1)).thenReturn(emptyOrderDTO);
+        CustomerDTO emptyCustomerDTO = new CustomerDTO();
+        emptyCustomerDTO.setCustomerName("John Doe");
+        emptyCustomerDTO.setCustomerEmail("john.doe@example.com");
+        OrderCustomerPageDTO emptyOrderDTO = new OrderCustomerPageDTO(emptyCustomerDTO, new PageImpl<>(Collections.emptyList()));
+        when(orderService.getOrdersByCustomerId(eq(1), any(), any())).thenReturn(emptyOrderDTO);
 
         mockMvc.perform(get("/api/v1/orders/customer/{customerId}", 1))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.status").value(200))
-                .andExpect(jsonPath("$.message").value("customer having id: 1 has 0 order"))
-                .andExpect(jsonPath("$.data.customer.customerId").value(1))
-                .andExpect(jsonPath("$.data.orderItems").isArray())
-                .andExpect(jsonPath("$.data.orderItems").isEmpty());
+                .andExpect(jsonPath("$.message").value("customer order details"))
+                .andExpect(jsonPath("$.data.customer.customerName").value("John Doe"))
+                .andExpect(jsonPath("$.data.orderDetails.content").isArray())
+                .andExpect(jsonPath("$.data.orderDetails.content").isEmpty());
     }
 
     @Test
     @DisplayName("GET /api/v1/orders/customer/{customerId} - Invalid Customer ID (Zero)")
     void getOrdersByCustomerId_InvalidCustomerIdZero() throws Exception {
-        when(orderService.getOrdersByCustomerId(0))
+        when(orderService.getOrdersByCustomerId(eq(0), any(), any()))
                 .thenThrow(new OrderInvalidRequestException("Customer do next exist having customer id: 0"));
 
         mockMvc.perform(get("/api/v1/orders/customer/{customerId}", 0))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.status").value(404));
+                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.message").value("404 NOT_FOUND, Customer do next exist having customer id: 0"))
+                .andExpect(jsonPath("$.data").doesNotExist());
     }
 
     @Test
     @DisplayName("GET /api/v1/orders/customer/{customerId} - Negative Customer ID")
     void getOrdersByCustomerId_NegativeCustomerId() throws Exception {
-        when(orderService.getOrdersByCustomerId(-1))
+        when(orderService.getOrdersByCustomerId(eq(-1), any(), any()))
                 .thenThrow(new OrderInvalidRequestException("Customer do next exist having customer id: -1"));
 
         mockMvc.perform(get("/api/v1/orders/customer/{customerId}", -1))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.status").value(404));
+                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.message").value("404 NOT_FOUND, Customer do next exist having customer id: -1"))
+                .andExpect(jsonPath("$.data").doesNotExist());
     }
 
     @Test
@@ -199,7 +214,9 @@ class OrderControllerTest {
         mockMvc.perform(get("/api/v1/orders/detail/{orderId}", 999))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.status").value(404));
+                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.message").value("404 NOT_FOUND, Order not found having order id: 999"))
+                .andExpect(jsonPath("$.data").doesNotExist());
     }
 
     @Test
@@ -211,7 +228,9 @@ class OrderControllerTest {
         mockMvc.perform(get("/api/v1/orders/detail/{orderId}", 0))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.status").value(404));
+                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.message").value("404 NOT_FOUND, Order not found having order id: 0"))
+                .andExpect(jsonPath("$.data").doesNotExist());
     }
 
     @Test
@@ -223,7 +242,9 @@ class OrderControllerTest {
         mockMvc.perform(get("/api/v1/orders/detail/{orderId}", -1))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.status").value(404));
+                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.message").value("404 NOT_FOUND, Order not found having order id: -1"))
+                .andExpect(jsonPath("$.data").doesNotExist());
     }
 
     @Test
@@ -247,6 +268,4 @@ class OrderControllerTest {
                 .andExpect(jsonPath("$.data.orderItems").isArray())
                 .andExpect(jsonPath("$.data.orderItems").isEmpty());
     }
-
-    
-    }
+}

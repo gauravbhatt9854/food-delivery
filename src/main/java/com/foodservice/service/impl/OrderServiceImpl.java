@@ -10,6 +10,8 @@ import com.foodservice.repository.CustomerRepository;
 import com.foodservice.repository.OrderRepository;
 import com.foodservice.service.OrderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -29,7 +31,17 @@ public class OrderServiceImpl implements OrderService {
 
         List<OrderItemDetailDTO> orderDetails = orderRepository.getOrderDetailsByCustomerId(customerId);
 
-        return new OrderCustomerDTO(customer, orderDetails);
+        return new OrderCustomerDTO(CustomMapper.customerToCustomerDTO(customer), orderDetails);
+    }
+
+    @Override
+    public OrderCustomerPageDTO getOrdersByCustomerId(Integer customerId, Pageable pageable, String status) {
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(() -> new OrderInvalidRequestException("Customer do next exist having customer id: " + customerId));
+
+        Page<OrderItemDetailDTO> orderDetails = orderRepository.getOrderDetailsByCustomerId(customerId, pageable, status);
+
+        return new OrderCustomerPageDTO(CustomMapper.customerToCustomerDTO(customer), orderDetails);
     }
 
     @Override

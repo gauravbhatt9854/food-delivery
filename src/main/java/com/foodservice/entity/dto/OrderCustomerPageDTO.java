@@ -1,14 +1,12 @@
 package com.foodservice.entity.dto;
 
-import com.foodservice.entity.Customer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 @Data
 @AllArgsConstructor
-public class OrderCustomerDTO {
+public class OrderCustomerPageDTO {
     private CustomerDTO customer;
-    private List<OrderItemDetailDTO> orderItems;
+    private Page<OrderItemDetailDTO> orderDetails;
 }
