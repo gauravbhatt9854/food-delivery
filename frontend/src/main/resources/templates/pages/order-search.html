@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Search - Food Service</title>
+    <link rel="stylesheet" href="/css/orders/orders.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-shell">
+        <!-- Sidebar -->
+        <div th:replace="~{fragments/orders/sidebar :: sidebar}"></div>
+
+        <!-- Main Content -->
+        <main class="main">
+            <!-- Order Search Header -->
+            <header class="order-details-topbar">
+                <div class="topbar-left">
+                    <h1 class="page-title">Order Search</h1>
+                    <div class="order-breadcrumb">
+                        <a href="/orders" class="breadcrumb-link">Orders</a>
+                        <span class="breadcrumb-separator">/</span>
+                        <span class="breadcrumb-current">Search</span>
+                    </div>
+                </div>
+                <div class="topbar-right">
+                    <div class="order-id-input">
+                        <input type="number" 
+                               id="orderIdInput" 
+                               class="order-id-field" 
+                               placeholder="Enter order id" 
+                               min="1"
+                               onkeypress="handleOrderIdKeyPress(event)">
+                        <button class="btn btn-primary" onclick="navigateToOrder()">
+                            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                            </svg>
+                            View Order
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <div class="content">
+                <!-- Search Instructions -->
+                <div class="search-instructions-card">
+                    <div class="instruction-content">
+                        <div class="instruction-icon">
+                            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <div class="instruction-text">
+                            <h2>Search for Orders</h2>
+                            <p>Enter an order ID in the search box above to view detailed order information. You can also press Enter to quickly navigate to the order details page.</p>
+                            <div class="instruction-tips">
+                                <div class="tip-item">
+                                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    <span>Only positive numbers are accepted</span>
+                                </div>
+
+                                <div class="tip-item">
+                                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                                    </svg>
+                                    <span>View complete order details and status</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <style>
+        /* Order Search Page Styles */
+        .order-details-topbar {
+            background: var(--color-surface);
+            border-bottom: 1px solid var(--color-border-soft);
+            padding: 20px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .topbar-left {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .order-breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+        }
+
+        .breadcrumb-link {
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            transition: color var(--transition);
+        }
+
+        .breadcrumb-link:hover {
+            color: var(--color-sage);
+        }
+
+        .breadcrumb-separator {
+            color: var(--color-text-tertiary);
+        }
+
+        .breadcrumb-current {
+            color: var(--color-text-primary);
+            font-weight: 500;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .order-id-input {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .order-id-field {
+            padding: 10px 14px;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            font-size: 14px;
+            font-family: var(--font-body);
+            background: var(--color-surface);
+            color: var(--color-text-primary);
+            width: 180px;
+            transition: border-color var(--transition), box-shadow var(--transition);
+            /* Hide increment/decrement buttons */
+            -moz-appearance: textfield;
+            -webkit-appearance: textfield;
+            appearance: textfield;
+        }
+
+        .order-id-field::-webkit-outer-spin-button,
+        .order-id-field::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .order-id-field::-moz-number-spin-box {
+            display: none;
+        }
+
+        .order-id-field:focus {
+            outline: none;
+            border-color: var(--color-sage);
+            box-shadow: 0 0 0 3px hsla(111, 35%, 55%, 0.1);
+        }
+
+        .order-id-field::placeholder {
+            color: var(--color-text-tertiary);
+        }
+
+        /* Search Instructions Card */
+        .search-instructions-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-xl);
+            padding: 48px;
+            margin-top: 32px;
+            box-shadow: var(--shadow-elevated);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .instruction-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 24px;
+        }
+
+        .instruction-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--color-accent-glow);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--color-sage-light);
+        }
+
+        .instruction-icon svg {
+            width: 36px;
+            height: 36px;
+            color: var(--color-sage);
+        }
+
+        .instruction-text h2 {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--color-text-primary);
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .instruction-text p {
+            font-size: 16px;
+            color: var(--color-text-secondary);
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto 24px;
+        }
+
+        .instruction-tips {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .tip-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 20px;
+            background: var(--color-surface-2);
+            border: 1px solid var(--color-border-soft);
+            border-radius: var(--radius-lg);
+            text-align: left;
+        }
+
+        .tip-item svg {
+            width: 20px;
+            height: 20px;
+            color: var(--color-sage);
+            flex-shrink: 0;
+        }
+
+        .tip-item span {
+            font-size: 14px;
+            color: var(--color-text-primary);
+            font-weight: 500;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            .order-details-topbar {
+                padding: 16px 24px;
+            }
+
+            .search-instructions-card {
+                padding: 32px 24px;
+                margin-top: 24px;
+            }
+
+            .instruction-text h2 {
+                font-size: 28px;
+            }
+
+            .instruction-tips {
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .order-details-topbar {
+                padding: 16px 20px;
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .topbar-left {
+                gap: 8px;
+            }
+
+            .order-breadcrumb {
+                font-size: 12px;
+            }
+
+            .order-id-input {
+                flex-direction: column;
+                gap: 8px;
+                width: 100%;
+                max-width: 200px;
+            }
+
+            .order-id-field {
+                width: 100%;
+                font-size: 13px;
+                padding: 8px 12px;
+            }
+
+            .order-id-input .btn {
+                width: 100%;
+                font-size: 13px;
+                padding: 8px 12px;
+            }
+
+            .search-instructions-card {
+                padding: 24px 20px;
+                margin-top: 20px;
+            }
+
+            .instruction-content {
+                gap: 20px;
+            }
+
+            .instruction-icon {
+                width: 64px;
+                height: 64px;
+            }
+
+            .instruction-icon svg {
+                width: 28px;
+                height: 28px;
+            }
+
+            .instruction-text h2 {
+                font-size: 24px;
+            }
+
+            .instruction-text p {
+                font-size: 15px;
+            }
+
+            .tip-item {
+                padding: 12px 16px;
+            }
+        }
+
+        /* Animation */
+        .search-instructions-card {
+            animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Hover Effects */
+        .tip-item:hover {
+            background: var(--color-surface);
+            border-color: var(--color-sage-light);
+            transform: translateY(-1px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .instruction-icon:hover {
+            transform: scale(1.05);
+            background: var(--color-mint);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+
+    <script>
+        function handleOrderIdKeyPress(event) {
+            if (event.key === 'Enter') {
+                navigateToOrder();
+            }
+        }
+
+        function navigateToOrder() {
+            const orderIdInput = document.getElementById('orderIdInput');
+            const orderId = orderIdInput.value.trim();
+            
+            if (orderId && orderId > 0) {
+                // Navigate to the order details page with the entered ID
+                window.location.href = '/orders/detail/' + orderId;
+            } else {
+                // Show error feedback
+                orderIdInput.style.borderColor = 'hsl(0, 70%, 50%)';
+                orderIdInput.focus();
+                
+                // Reset border color after 2 seconds
+                setTimeout(() => {
+                    orderIdInput.style.borderColor = '';
+                }, 2000);
+            }
+        }
+
+        // Focus on input field when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('orderIdInput').focus();
+        });
+    </script>
+</body>
+</html>

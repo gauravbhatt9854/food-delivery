@@ -1,12 +1,15 @@
 package com.foodservice.frontend.controller;
 
 import com.foodservice.frontend.entity.dto.OrderCustomerDTO;
+import com.foodservice.frontend.entity.dto.OrderWithItemDTO;
+import com.foodservice.frontend.helper.OrderTotalCost;
 import com.foodservice.frontend.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 @Controller
@@ -39,7 +42,25 @@ public class OrderController {
     }
 
     @GetMapping("/detail/{orderId}")
-    public String getOrderDetailsById() {
+    public String getOrderDetailsById(@PathVariable("orderId") Integer orderId,
+                                     Model model,
+                                     @RequestParam Map<String, String> params,
+                                     @CookieValue(name = "token", required = true) String token)
+    {
+        OrderWithItemDTO orderWithItemDTO = orderService.getOrderDetailsById(orderId, params, token);
 
+        // Calculate total amount
+        BigDecimal totalAmount = OrderTotalCost.calculateTotalCost(orderWithItemDTO);
+        model.addAttribute("totalAmount", totalAmount);
+        
+        model.addAttribute("orderWithItemDTO", orderWithItemDTO);
+
+        return "pages/order-details";
+    }
+
+    @GetMapping("/**")
+    public String getSearchPage(Model model) {
+        model.addAttribute("title", "Search");
+        return "pages/order-search";
     }
 }

@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Details - Food Service</title>
+    <link rel="stylesheet" href="/css/orders/orders.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+</head>
+<body>
+    <div class="app-shell">
+        <!-- Sidebar -->
+        <div th:replace="~{fragments/orders/sidebar :: sidebar}"></div>
+
+        <!-- Main Content -->
+        <main class="main">
+            <!-- Custom Top Bar for Order Details -->
+            <header class="order-details-topbar">
+                <div class="topbar-left">
+                    <h1 class="page-title">Order Details</h1>
+                    <div class="order-breadcrumb">
+                        <a href="/orders" class="breadcrumb-link">Orders</a>
+                        <span class="breadcrumb-separator">/</span>
+                        <span class="breadcrumb-current">Order Details</span>
+                    </div>
+                </div>
+                <div class="topbar-right">
+                    <div class="order-id-input">
+                        <input type="number" 
+                               id="orderIdInput" 
+                               class="order-id-field" 
+                               placeholder="Enter order id" 
+                               min="1"
+                               onkeypress="handleOrderIdKeyPress(event)">
+                        <button class="btn btn-primary" onclick="navigateToOrder()">
+                            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                            </svg>
+                            View Order
+                        </button>
+                    </div>
+                </div>
+
+            </header>
+
+            <!-- Content Area -->
+            <div class="content">
+                <!-- Order Information Grid -->
+                <div class="order-info-grid">
+                    <!-- Customer Information -->
+                    <div class="info-card">
+                        <div class="info-card-header">
+                            <div class="info-icon customer-icon">
+                                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                </svg>
+                            </div>
+                            <h3>Customer Information</h3>
+                        </div>
+                        <div class="info-content">
+                            <div class="info-row">
+                                <span class="info-label">Name:</span>
+                                <span class="info-value" th:text="${orderWithItemDTO.customer != null ? orderWithItemDTO.customer.customerName : 'N/A'}">John Doe</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Email:</span>
+                                <span class="info-value" th:text="${orderWithItemDTO.customer != null ? orderWithItemDTO.customer.customerEmail : 'N/A'}">john.doe@email.com</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Phone:</span>
+                                <span class="info-value" th:text="${orderWithItemDTO.customer != null ? orderWithItemDTO.customer.customerPhone : 'N/A'}">+1 234 567 8900</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Customer ID:</span>
+                                <span class="info-value" th:text="${orderWithItemDTO.customer != null ? orderWithItemDTO.customer.customerId : 'N/A'}">12345</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Restaurant Information -->
+                    <div class="info-card">
+                        <div class="info-card-header">
+                            <div class="info-icon restaurant-icon">
+                                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                                </svg>
+                            </div>
+                            <h3>Restaurant Information</h3>
+                        </div>
+                        <div class="info-content">
+                            <div class="info-row">
+                                <span class="info-label">Name:</span>
+                                <span class="info-value" th:text="${orderWithItemDTO.restaurant != null ? orderWithItemDTO.restaurant.restaurantName : 'N/A'}">Tasty Bites</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Address:</span>
+                                <span class="info-value" th:text="${orderWithItemDTO.restaurant != null ? orderWithItemDTO.restaurant.restaurantAddress : 'N/A'}">123 Main St</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Phone:</span>
+                                <span class="info-value" th:text="${orderWithItemDTO.restaurant != null ? orderWithItemDTO.restaurant.restaurantPhone : 'N/A'}">+1234567890</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Delivery Driver Information -->
+                    <div class="info-card">
+                        <div class="info-card-header">
+                            <div class="info-icon driver-icon">
+                                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"/>
+                                    <path d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1z"/>
+                                </svg>
+                            </div>
+                            <h3>Delivery Driver</h3>
+                        </div>
+                        <div class="info-content">
+                            <div class="info-row">
+                                <span class="info-label">Name:</span>
+                                <span class="info-value" th:text="${orderWithItemDTO.deliveryDriver != null ? orderWithItemDTO.deliveryDriver.driverName : 'Not Assigned'}">Michael Johnson</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Phone:</span>
+                                <span class="info-value" th:text="${orderWithItemDTO.deliveryDriver != null ? orderWithItemDTO.deliveryDriver.driverPhone : 'N/A'}">+11234567890</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Vehicle:</span>
+                                <span class="info-value" th:text="${orderWithItemDTO.deliveryDriver != null ? orderWithItemDTO.deliveryDriver.driverVehicle : 'N/A'}">Car</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Status:</span>
+                                <span class="info-value driver-status" th:text="${orderWithItemDTO.deliveryDriver != null ? 'Available' : 'Not Assigned'}">Available</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order Items Section -->
+                <div class="order-items-section">
+                    <div class="section-header">
+                        <h3>Order Items</h3>
+                        <div class="items-summary">
+                            <span class="total-items" th:text="${orderWithItemDTO.orderItems != null ? #lists.size(orderWithItemDTO.orderItems) : '0'} + ' items'">3 items</span>
+                            <span class="total-amount" th:text="'Total: $' + ${#numbers.formatDecimal(totalAmount, 2, 2)}">Total: $35.97</span>
+                        </div>
+                    </div>
+
+                    <div class="items-table-card">
+                        <div class="table-scroll">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Item</th>
+                                        <th>Description</th>
+                                        <th>Quantity</th>
+                                        <th>Price</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="item : ${orderWithItemDTO.orderItems}" th:if="${orderWithItemDTO.orderItems != null}">
+                                        <td>
+                                            <div class="item-name" th:text="${item.itemName}">Pizza</div>
+                                        </td>
+                                        <td>
+                                            <div class="item-desc" th:text="${item.itemDescription}">Delicious pizza with assorted toppings</div>
+                                        </td>
+                                        <td>
+                                            <div class="qty-badge" th:text="${item.quantity}">2</div>
+                                        </td>
+                                        <td>
+                                            <div class="price" th:text="'$' + ${#numbers.formatDecimal(item.itemPrice, 2, 2)}">$12.99</div>
+                                        </td>
+                                        <td>
+                                            <div class="price item-total" th:text="'$' + ${#numbers.formatDecimal(item.itemPrice * item.quantity, 2, 2)}">$25.98</div>
+                                        </td>
+                                    </tr>
+                                    <tr th:if="${orderWithItemDTO.orderItems == null or #lists.isEmpty(orderWithItemDTO.orderItems)}">
+                                        <td colspan="5" class="no-items">
+                                            <div class="empty-state">
+                                                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                    <path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                                                </svg>
+                                                <p>No items in this order</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order Summary -->
+                <div class="order-summary-card">
+                    <div class="order-summary">
+                        <div class="summary-item">
+                            <span class="summary-label">Status:</span>
+                            <div class="order-status-badge" th:classappend="'status-' + ${#strings.toLowerCase(orderWithItemDTO.orderStatus)}">
+                                <span th:text="${orderWithItemDTO.orderStatus}">Pending</span>
+                            </div>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Items:</span>
+                            <span class="summary-value" th:text="${orderWithItemDTO.orderItems != null ? #lists.size(orderWithItemDTO.orderItems) : '0'}">3</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Total:</span>
+                            <span class="summary-value total-amount" th:text="'$' + ${#numbers.formatDecimal(totalAmount, 2, 2)}">$35.97</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <style>
+        /* Order Details Top Bar Styles */
+        .order-details-topbar {
+            background: var(--color-surface);
+            border-bottom: 1px solid var(--color-border-soft);
+            padding: 20px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .topbar-left {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .order-breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+        }
+
+        .breadcrumb-link {
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            transition: color var(--transition);
+        }
+
+        .breadcrumb-link:hover {
+            color: var(--color-sage);
+        }
+
+        .breadcrumb-separator {
+            color: var(--color-text-tertiary);
+        }
+
+        .breadcrumb-current {
+            color: var(--color-text-primary);
+            font-weight: 500;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .order-summary {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 12px 20px;
+            background: var(--color-surface-2);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+        }
+
+        .summary-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .summary-label {
+            font-size: 11px;
+            color: var(--color-text-tertiary);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .summary-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--color-text-primary);
+        }
+
+        .order-status-badge {
+            padding: 4px 10px;
+            border-radius: 99px;
+            font-size: 11px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-pending {
+            background: hsl(40, 90%, 93%);
+            color: hsl(40, 70%, 40%);
+        }
+
+        .status-processing {
+            background: hsl(210, 70%, 93%);
+            color: hsl(210, 60%, 42%);
+        }
+
+        .status-delivered {
+            background: hsl(111, 40%, 92%);
+            color: hsl(111, 35%, 38%);
+        }
+
+        .status-cancelled {
+            background: hsl(0, 70%, 94%);
+            color: hsl(0, 55%, 48%);
+        }
+
+        .topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .order-id-input {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .order-id-field {
+            padding: 10px 14px;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            font-size: 14px;
+            font-family: var(--font-body);
+            background: var(--color-surface);
+            color: var(--color-text-primary);
+            width: 180px;
+            transition: border-color var(--transition), box-shadow var(--transition);
+            /* Hide increment/decrement buttons */
+            -moz-appearance: textfield;
+            -webkit-appearance: textfield;
+            appearance: textfield;
+        }
+
+        .order-id-field::-webkit-outer-spin-button,
+        .order-id-field::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .order-id-field::-moz-number-spin-box {
+            display: none;
+        }
+
+        .order-id-field:focus {
+            outline: none;
+            border-color: var(--color-sage);
+            box-shadow: 0 0 0 3px hsla(111, 35%, 55%, 0.1);
+        }
+
+        .order-id-field::placeholder {
+            color: var(--color-text-tertiary);
+        }
+
+        /* Order Summary Card */
+        .order-summary-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-xl);
+            padding: 20px;
+            margin-top: 24px;
+            box-shadow: var(--shadow-elevated);
+            max-width: 400px;
+            margin-left: auto;
+        }
+
+        .order-summary-card .order-summary {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 12px 16px;
+            padding: 0;
+            background: transparent;
+            border: none;
+        }
+
+        .order-summary-card .summary-item {
+            display: contents;
+        }
+
+        .order-summary-card .summary-label {
+            font-size: 13px;
+            color: var(--color-text-tertiary);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            justify-self: start;
+        }
+
+        .order-summary-card .summary-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--color-text-primary);
+            text-align: right;
+            justify-self: end;
+        }
+
+        .order-summary-card .total-amount {
+            font-size: 18px;
+            color: var(--color-sage);
+        }
+
+        .order-summary-card .order-status-badge {
+            padding: 4px 8px;
+            border-radius: 99px;
+            font-size: 11px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            justify-self: end;
+        }
+
+        /* Order Details Page Styles */
+        .order-header-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-xl);
+            padding: 32px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-elevated);
+        }
+
+        .order-header-content {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 24px;
+        }
+
+        .order-title-section {
+            flex: 1;
+        }
+
+        .order-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--color-text-primary);
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .order-meta {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .order-date {
+            font-size: 14px;
+            color: var(--color-text-secondary);
+        }
+
+        .order-status-badge {
+            padding: 6px 12px;
+            border-radius: 99px;
+            font-size: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-pending {
+            background: hsl(40, 90%, 93%);
+            color: hsl(40, 70%, 40%);
+        }
+
+        .status-processing {
+            background: hsl(210, 70%, 93%);
+            color: hsl(210, 60%, 42%);
+        }
+
+        .status-delivered {
+            background: hsl(111, 40%, 92%);
+            color: hsl(111, 35%, 38%);
+        }
+
+        .status-cancelled {
+            background: hsl(0, 70%, 94%);
+            color: hsl(0, 55%, 48%);
+        }
+
+        .order-actions {
+            display: flex;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+
+        .order-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .info-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-xl);
+            padding: 24px;
+            box-shadow: var(--shadow-card);
+        }
+
+        .info-card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .info-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .info-icon svg {
+            width: 20px;
+            height: 20px;
+            color: #fff;
+        }
+
+        .customer-icon {
+            background: linear-gradient(135deg, var(--color-sage), var(--color-sage-light));
+        }
+
+        .restaurant-icon {
+            background: linear-gradient(135deg, hsl(210, 70%, 50%), hsl(210, 70%, 60%));
+        }
+
+        .driver-icon {
+            background: linear-gradient(135deg, hsl(40, 70%, 50%), hsl(40, 70%, 60%));
+        }
+
+        .info-card-header h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--color-text-primary);
+            margin: 0;
+        }
+
+        .info-content {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--color-border-soft);
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            font-size: 13px;
+            color: var(--color-text-tertiary);
+            font-weight: 500;
+        }
+
+        .info-value {
+            font-size: 14px;
+            color: var(--color-text-primary);
+            font-weight: 500;
+            text-align: right;
+        }
+
+        .driver-status {
+            color: var(--color-sage);
+            font-weight: 600;
+        }
+
+        .order-items-section {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-card);
+            overflow: hidden;
+        }
+
+        .section-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--color-border-soft);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .section-header h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--color-text-primary);
+            margin: 0;
+        }
+
+        .items-summary {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .total-items {
+            font-size: 13px;
+            color: var(--color-text-secondary);
+            background: var(--color-surface-2);
+            padding: 4px 10px;
+            border-radius: 99px;
+        }
+
+        .total-amount {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--color-sage);
+        }
+
+        .items-table-card {
+            background: var(--color-surface);
+        }
+
+        .no-items {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            color: var(--color-text-tertiary);
+        }
+
+        .empty-state svg {
+            width: 42px;
+            height: 42px;
+            opacity: 0.3;
+        }
+
+        .empty-state p {
+            font-size: 14px;
+            margin: 0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            .order-header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .order-actions {
+                width: 100%;
+                justify-content: flex-start;
+            }
+
+            .order-info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .info-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+            }
+
+            .info-value {
+                text-align: left;
+            }
+
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .items-summary {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .order-details-topbar {
+                padding: 16px 20px;
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .topbar-left {
+                gap: 8px;
+            }
+
+            .order-breadcrumb {
+                font-size: 12px;
+            }
+
+            .order-id-input {
+                flex-direction: column;
+                gap: 8px;
+                width: 100%;
+                max-width: 200px;
+            }
+
+            .order-id-field {
+                width: 100%;
+                font-size: 13px;
+                padding: 8px 12px;
+            }
+
+            .order-id-input .btn {
+                width: 100%;
+                font-size: 13px;
+                padding: 8px 12px;
+            }
+
+            .order-header-card {
+                padding: 24px 20px;
+            }
+
+            .info-card {
+                padding: 20px;
+            }
+
+            .order-title {
+                font-size: 24px;
+            }
+
+            .table-scroll {
+                margin: 0 -24px;
+                padding: 0 24px;
+            }
+
+            .order-summary-card {
+                max-width: 100%;
+                margin-left: 0;
+                margin-right: 0;
+                padding: 16px;
+            }
+
+            .order-summary-card .order-summary {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .order-summary-card .summary-label {
+                justify-self: start;
+            }
+
+            .order-summary-card .summary-value {
+                justify-self: end;
+            }
+
+            .order-summary-card .order-status-badge {
+                justify-self: end;
+            }
+
+            .order-summary-card .total-amount {
+                font-size: 16px;
+            }
+        }
+    </style>
+
+    <script>
+        function handleOrderIdKeyPress(event) {
+            if (event.key === 'Enter') {
+                navigateToOrder();
+            }
+        }
+
+        function navigateToOrder() {
+            const orderIdInput = document.getElementById('orderIdInput');
+            const orderId = orderIdInput.value.trim();
+            
+            if (orderId && orderId > 0) {
+                // Navigate to the order details page with the entered ID
+                window.location.href = '/orders/detail/' + orderId;
+            } else {
+                // Show error feedback
+                orderIdInput.style.borderColor = 'hsl(0, 70%, 50%)';
+                orderIdInput.focus();
+                
+                // Reset border color after 2 seconds
+                setTimeout(() => {
+                    orderIdInput.style.borderColor = '';
+                }, 2000);
+            }
+        }
+
+        // Set current order ID in input field when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentPath = window.location.pathname;
+            const orderIdMatch = currentPath.match(/\/orders\/detail\/(\d+)/);
+            
+            if (orderIdMatch) {
+                const currentOrderId = orderIdMatch[1];
+                document.getElementById('orderIdInput').value = currentOrderId;
+            }
+        });
+    </script>
+</body>
+</html>
