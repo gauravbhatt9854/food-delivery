@@ -12,59 +12,62 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Your CSS -->
-    <link rel="stylesheet" th:href="@{/css/delivery-address/delivery-address-details.css}">
-
-    <!-- JS -->
-    <script th:src="@{/js/delivery-address/delivery-address-details.js}" defer></script>
+    <!-- Tailwind -->
+    <link rel="stylesheet" th:href="@{/css/output.css}">
 </head>
 
-<body>
+<body class="bg-gray-100 font-[Inter]">
 
 <!-- 🔹 Top Actions -->
-<div class="actions">
+<div class="flex justify-between items-center max-w-3xl mx-auto mt-6 px-4">
 
-    <button class="btn back-btn" onclick="window.history.back()">
+    <button onclick="window.history.back()"
+            class="flex items-center gap-2 bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-lg shadow">
         <i class="fa fa-arrow-left"></i> Back
     </button>
 
-    <button class="btn"
-            th:onclick="'window.location.href=\'/delivery-address?city=' + ${address.city} + '\''">
+    <button
+            th:onclick="'window.location.href=\'/delivery-address?city=' + ${address.city} + '\''"
+            class="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg shadow">
         <i class="fa fa-city"></i> Addresses in City
     </button>
 
 </div>
 
 <!-- 🔹 Address Card -->
-<div class="card">
+<div class="max-w-3xl mx-auto mt-6 px-4">
+    <div class="bg-white rounded-2xl shadow-lg p-6">
 
-    <h2><i class="fa fa-location-dot"></i> Address Detail</h2>
+        <h2 class="text-xl font-semibold mb-4 flex items-center gap-2 text-gray-800">
+            <i class="fa fa-location-dot text-blue-500"></i> Address Detail
+        </h2>
 
-    <p>
-        <i class="fa fa-road"></i>
-        <span th:text="${address.addressLine1}"></span>
-    </p>
+        <p class="flex items-center gap-2 text-gray-700 mb-2">
+            <i class="fa fa-road text-gray-500"></i>
+            <span th:text="${address.addressLine1}"></span>
+        </p>
 
-    <p th:if="${address.addressLine2}">
-        <i class="fa fa-road"></i>
-        <span th:text="${address.addressLine2}"></span>
-    </p>
+        <p th:if="${address.addressLine2}" class="flex items-center gap-2 text-gray-700 mb-2">
+            <i class="fa fa-road text-gray-500"></i>
+            <span th:text="${address.addressLine2}"></span>
+        </p>
 
-    <p>
-        <strong><i class="fa fa-city"></i> City:</strong>
-        <span th:text="${address.city}"></span>
-    </p>
+        <p class="mb-2 text-gray-700">
+            <strong class="mr-1"><i class="fa fa-city text-gray-500"></i> City:</strong>
+            <span th:text="${address.city}"></span>
+        </p>
 
-    <p>
-        <strong><i class="fa fa-map"></i> State:</strong>
-        <span th:text="${address.state}"></span>
-    </p>
+        <p class="mb-2 text-gray-700">
+            <strong class="mr-1"><i class="fa fa-map text-gray-500"></i> State:</strong>
+            <span th:text="${address.state}"></span>
+        </p>
 
-    <p>
-        <strong><i class="fa fa-envelope"></i> Pincode:</strong>
-        <span th:text="${address.postalCode}"></span>
-    </p>
+        <p class="text-gray-700">
+            <strong class="mr-1"><i class="fa fa-envelope text-gray-500"></i> Pincode:</strong>
+            <span th:text="${address.postalCode}"></span>
+        </p>
 
+    </div>
 </div>
 
 </body>
