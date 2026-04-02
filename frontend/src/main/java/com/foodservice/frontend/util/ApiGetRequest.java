@@ -1,8 +1,11 @@
 package com.foodservice.frontend.util;
 
 import com.foodservice.frontend.entity.dto.ApiResponseDTO;
+import com.foodservice.frontend.exception.ServerResponseException;
+import com.foodservice.frontend.exception.UnauthorizedException;
 import lombok.AllArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -21,6 +24,11 @@ public class ApiGetRequest<T> {
                 })
                 .cookie("token", token)
                 .retrieve()
+                .onStatus(
+                        HttpStatusCode::isError,
+                        res -> res.bodyToMono(String.class)
+                                .map(body -> new ServerResponseException("Response error: " + body))
+                )
                 .bodyToMono(typeReference)
                 .block();
 

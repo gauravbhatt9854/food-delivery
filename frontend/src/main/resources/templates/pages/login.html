@@ -546,7 +546,7 @@
         </div>
 
         <!-- Error / Success banners -->
-        <div class="banner banner-error" id="banner-error" role="alert">
+        <div class="banner banner-error" th:classappend="${status == 'error'} ? 'show'" id="banner-error" role="alert">
             <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
             </svg>
@@ -710,13 +710,6 @@
     }
 
     /* ── FORM SUBMIT ──────────────────────────────────────────────────── */
-    // Demo credentials (remove in production — Thymeleaf/Spring handles real auth)
-    const DEMO_USERS = {
-      admin:   'admin123',
-      manager: 'mgr456',
-      viewer:  'view789',
-    };
-
     function handleSubmit(e) {
       e.preventDefault();
 
@@ -748,34 +741,10 @@
       setTimeout(() => {
         btn.classList.remove('loading');
 
-        const isValid = DEMO_USERS[username] === password;
-
-        if (isValid) {
-          btn.classList.add('success');
-          showBanner('banner-success');
-          // In production: e.target.submit();
-          setTimeout(() => {
-            // window.location.href = '/dashboard';
-            showBanner('banner-success');
-          }, 1200);
-        } else {
-          btn.disabled = false;
-          // Identify wrong field
-          if (!DEMO_USERS[username]) {
-            showFieldError('username');
-            document.getElementById('banner-error-text').textContent = 'No account found for that username.';
-          } else {
-            showFieldError('password');
-            document.getElementById('banner-error-text').textContent = 'Incorrect password. Please try again.';
-          }
-          showBanner('banner-error');
-          document.getElementById('login-card').classList.add('shake');
-          setTimeout(() => document.getElementById('login-card').classList.remove('shake'), 400);
-          // Re-focus the wrong field
-          const wrongField = !DEMO_USERS[username] ? 'username' : 'password';
-          document.getElementById(wrongField).focus();
-        }
-      }, 900);
+        // Submit the form to backend instead of demo validation
+        const form = document.getElementById('login-form');
+        form.submit(); // This will submit to /auth/login
+      }, 500);
 
       return false;
     }
@@ -785,7 +754,13 @@
       if (e.key === 'Enter') {
         const active = document.activeElement;
         if (active && (active.id === 'username' || active.id === 'password')) {
-          handleSubmit(new Event('submit'));
+          // Call handleSubmit directly with a mock event
+          e.preventDefault();
+          const mockEvent = {
+            preventDefault: () => {},
+            target: document.getElementById('login-form')
+          };
+          handleSubmit(mockEvent);
         }
       }
     });

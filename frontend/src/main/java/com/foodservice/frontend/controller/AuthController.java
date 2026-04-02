@@ -19,7 +19,12 @@ public class AuthController {
     private final AuthService authService;
 
     @GetMapping("/login")
-    public String login() {
+    public String login(@CookieValue(name = "token", required = false) String token) {
+
+        if (token != null) {
+            return "redirect:/";
+        }
+
         return "pages/login";
     }
 
