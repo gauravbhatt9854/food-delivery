@@ -2,12 +2,15 @@ package com.foodservice.frontend.service.impl;
 
 import com.foodservice.frontend.entity.dto.*;
 import com.foodservice.frontend.service.CustomerService;
+import com.foodservice.frontend.util.ApiGetRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -16,72 +19,79 @@ public class CustomerServiceImpl implements CustomerService {
     private final WebClient webClient;
 
     @Override
-    public List<CustomerDTO> getAllCustomers(int page, int size) {
-        ApiResponseDTO<List<CustomerDTO>> response = webClient.get()
-                .uri(uriBuilder -> uriBuilder
-                        .path("/customers")
-                        .queryParam("page", page)
-                        .queryParam("size", size)
-                        .build())
-                .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<ApiResponseDTO<List<CustomerDTO>>>() {})
-                .block();
+    public List<CustomerDTO> getAllCustomers(int page, int size, String token) {
 
-        return response.getData();
+        ApiGetRequest<List<CustomerDTO>> apiGetRequest = new ApiGetRequest<>(webClient);
+
+        String url = "/customers";
+
+        Map<String, String> params = new HashMap<>();
+        params.put("page", String.valueOf(page));
+        params.put("size", String.valueOf(size));
+
+        ParameterizedTypeReference<ApiResponseDTO<List<CustomerDTO>>> typeRef =
+                new ParameterizedTypeReference<>() {};
+
+        return apiGetRequest.get(url, params, token, typeRef);
     }
 
     @Override
-    public CustomerDTO getCustomerById(Integer id) {
-        ApiResponseDTO<CustomerDTO> response = webClient.get()
-                .uri("/customers/{id}", id)
-                .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<ApiResponseDTO<CustomerDTO>>() {})
-                .block();
+    public CustomerDTO getCustomerById(Integer id, String token) {
 
-        return response.getData();
+        ApiGetRequest<CustomerDTO> apiGetRequest = new ApiGetRequest<>(webClient);
+
+        String url = "/customers/" + id;
+
+        Map<String, String> params = Map.of();
+
+        ParameterizedTypeReference<ApiResponseDTO<CustomerDTO>> typeRef =
+                new ParameterizedTypeReference<>() {};
+
+        return apiGetRequest.get(url, params, token, typeRef);
     }
 
     @Override
-    public List<DeliveryAddressDTO> getAddresses(Integer id) {
-        ApiResponseDTO<List<DeliveryAddressDTO>> response = webClient.get()
-                .uri("/customers/{id}/addresses", id)
-                .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<ApiResponseDTO<List<DeliveryAddressDTO>>>() {})
-                .block();
+    public List<DeliveryAddressDTO> getAddresses(Integer id, String token) {
 
-        return response.getData();
+        ApiGetRequest<List<DeliveryAddressDTO>> apiGetRequest = new ApiGetRequest<>(webClient);
+
+        String url = "/customers/" + id + "/addresses";
+
+        Map<String, String> params = Map.of();
+
+        ParameterizedTypeReference<ApiResponseDTO<List<DeliveryAddressDTO>>> typeRef =
+                new ParameterizedTypeReference<>() {};
+
+        return apiGetRequest.get(url, params, token, typeRef);
     }
 
     @Override
-    public List<OrderItemDetailDTO> getOrders(Integer id) {
-        ApiResponseDTO<List<OrderItemDetailDTO>> response = webClient.get()
-                .uri("/customers/{id}/orders", id)
-                .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<ApiResponseDTO<List<OrderItemDetailDTO>>>() {})
-                .block();
+    public List<OrderItemDetailDTO> getOrders(Integer id, String token) {
 
-        return response.getData();
+        ApiGetRequest<List<OrderItemDetailDTO>> apiGetRequest = new ApiGetRequest<>(webClient);
+
+        String url = "/customers/" + id + "/orders";
+
+        Map<String, String> params = Map.of();
+
+        ParameterizedTypeReference<ApiResponseDTO<List<OrderItemDetailDTO>>> typeRef =
+                new ParameterizedTypeReference<>() {};
+
+        return apiGetRequest.get(url, params, token, typeRef);
     }
 
     @Override
-    public Integer getAddressCount(Integer id) {
-        ApiResponseDTO<Integer> response = webClient.get()
-                .uri("/customers/{id}/address-count", id)
-                .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<ApiResponseDTO<Integer>>() {})
-                .block();
+    public CustomerAnalyticsDTO getAnalytics(Integer id, String token) {
 
-        return response.getData();
-    }
+        ApiGetRequest<CustomerAnalyticsDTO> apiGetRequest = new ApiGetRequest<>(webClient);
 
-    @Override
-    public CustomerAnalyticsDTO getAnalytics(Integer id) {
-        ApiResponseDTO<CustomerAnalyticsDTO> response = webClient.get()
-                .uri("/customers/{id}/analytics", id)
-                .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<ApiResponseDTO<CustomerAnalyticsDTO>>() {})
-                .block();
+        String url = "/customers/" + id + "/analytics";
 
-        return response.getData();
+        Map<String, String> params = Map.of();
+
+        ParameterizedTypeReference<ApiResponseDTO<CustomerAnalyticsDTO>> typeRef =
+                new ParameterizedTypeReference<>() {};
+
+        return apiGetRequest.get(url, params, token, typeRef);
     }
 }

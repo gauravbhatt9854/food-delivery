@@ -6,15 +6,13 @@ import java.util.List;
 
 public interface CustomerService {
 
-    List<CustomerDTO> getAllCustomers(int page, int size);
+    List<CustomerDTO> getAllCustomers(int page, int size, String token);
 
-    CustomerDTO getCustomerById(Integer id);
+    CustomerDTO getCustomerById(Integer id, String token);
 
-    List<DeliveryAddressDTO> getAddresses(Integer id);
+    List<DeliveryAddressDTO> getAddresses(Integer id, String token);
 
-    List<OrderItemDetailDTO> getOrders(Integer id);
+    List<OrderItemDetailDTO> getOrders(Integer id, String token);
 
-    Integer getAddressCount(Integer id);
-
-    CustomerAnalyticsDTO getAnalytics(Integer id);
+    CustomerAnalyticsDTO getAnalytics(Integer id, String token);
 }

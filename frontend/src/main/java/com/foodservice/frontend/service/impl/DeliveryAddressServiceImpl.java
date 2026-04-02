@@ -3,12 +3,14 @@ package com.foodservice.frontend.service.impl;
 import com.foodservice.frontend.entity.dto.ApiResponseDTO;
 import com.foodservice.frontend.entity.dto.DeliveryAddressDTO;
 import com.foodservice.frontend.service.DeliveryAddressService;
+import com.foodservice.frontend.util.ApiGetRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -17,29 +19,34 @@ public class DeliveryAddressServiceImpl implements DeliveryAddressService {
     private final WebClient webClient;
 
     @Override
-    public DeliveryAddressDTO getAddressById(Integer addressId) {
+    public DeliveryAddressDTO getAddressById(Integer addressId, String token) {
 
-        ApiResponseDTO<DeliveryAddressDTO> response = webClient.get()
-                .uri("/delivery-address/addresses/{addressId}", addressId)
-                .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<ApiResponseDTO<DeliveryAddressDTO>>() {})
-                .block();
+        ApiGetRequest<DeliveryAddressDTO> apiGetRequest = new ApiGetRequest<>(webClient);
 
-        return response.getData();
+        String url = "/delivery-address/addresses/" + addressId;
+
+        Map<String, String> params = Map.of();
+
+        ParameterizedTypeReference<ApiResponseDTO<DeliveryAddressDTO>> typeRef =
+                new ParameterizedTypeReference<>() {};
+
+        return apiGetRequest.get(url, params, token, typeRef);
     }
 
     @Override
-    public List<DeliveryAddressDTO> getAddressesByCity(String city) {
+    public List<DeliveryAddressDTO> getAddressesByCity(String city, String token) {
 
-        ApiResponseDTO<List<DeliveryAddressDTO>> response = webClient.get()
-                .uri(uriBuilder -> uriBuilder
-                        .path("/delivery-address/addresses/city")
-                        .queryParam("city", city)
-                        .build())
-                .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<ApiResponseDTO<List<DeliveryAddressDTO>>>() {})
-                .block();
+        ApiGetRequest<List<DeliveryAddressDTO>> apiGetRequest = new ApiGetRequest<>(webClient);
 
-        return response.getData();
+        String url = "/delivery-address/addresses/city";
+
+        Map<String, String> params = Map.of(
+                "city", city
+        );
+
+        ParameterizedTypeReference<ApiResponseDTO<List<DeliveryAddressDTO>>> typeRef =
+                new ParameterizedTypeReference<>() {};
+
+        return apiGetRequest.get(url, params, token, typeRef);
     }
 }
