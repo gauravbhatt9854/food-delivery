@@ -1,5 +1,6 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", function () {
 
+    // Card animation
     const cards = document.querySelectorAll(".card");
 
     cards.forEach((card, i) => {
@@ -12,5 +13,4 @@ document.addEventListener("DOMContentLoaded", () => {
             card.style.transform = "translateY(0)";
         }, i * 120);
     });
-
 });

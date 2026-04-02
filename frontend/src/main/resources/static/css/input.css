@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+/* Tell Tailwind where Thymeleaf files are */
+@source "../../templates/**/*.html";
+@source "../../templates/pages/**/*.html";   /* 👈 ADD THIS */
+/* Optional theme customization */
+@theme {
+  --color-brand: #3b82f6;
+  --font-display: "Inter", "sans-serif";
+}
+
+/* Optional base styles */
+@layer base {
+  h1 {
+    @apply text-2xl font-bold;
+  }
+}
