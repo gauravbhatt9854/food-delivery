@@ -4,6 +4,7 @@ import com.foodservice.entity.dto.RatingResponseDTO;
 import com.foodservice.entity.dto.RestaurantResponseDTO;
 import com.foodservice.exception.RestaurantNotFoundException;
 import com.foodservice.security.JwtAuthFilter;
+import com.foodservice.service.RatingService;
 import com.foodservice.service.RestaurantService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
@@ -50,6 +51,9 @@ class RestaurantControllerTest {
 
     @MockBean
     private RestaurantService restaurantService;
+
+    @MockBean
+    private RatingService ratingService;
 
     @MockBean
     private com.foodservice.security.JwtService jwtService;

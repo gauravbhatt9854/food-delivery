@@ -8,9 +8,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
-
+@Repository
 public interface RatingRepository extends JpaRepository<Rating, Integer> {
     @Query(value = "SELECT r FROM Rating r JOIN FETCH r.order o JOIN FETCH o.customer WHERE r.restaurant.restaurantId = :restaurantId",
             countQuery = "SELECT count(r) FROM Rating r WHERE r.restaurant.restaurantId = :restaurantId")
