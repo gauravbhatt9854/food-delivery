@@ -1,0 +1,33 @@
+:root {
+    --primary: hsl(108, 23%, 58%);
+    --accent: hsl(105, 53%, 83%);
+    --bg: hsl(75, 74%, 86%);
+}
+
+body {
+    background: var(--bg);
+    font-family: 'Inter', sans-serif;
+    padding: 20px;
+}
+
+/* Container spacing */
+.container {
+    display: grid;
+    gap: 16px;
+    padding: 10px;
+}
+
+/* Card styling */
+.card {
+    padding: 15px;
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: 0.2s;
+}
+
+/* Hover effect */
+.card:hover {
+    transform: translateY(-3px);
+    background: #f9f9f9;
+}

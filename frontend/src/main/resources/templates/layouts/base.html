@@ -1,0 +1,15 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:replace="${title}">App</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body>
+
+<div th:replace="fragments/navbar :: navbar"></div>
+
+<div th:replace="${content}"></div>
+
+<div th:replace="fragments/footer :: footer"></div>
+
+</body>
+</html>

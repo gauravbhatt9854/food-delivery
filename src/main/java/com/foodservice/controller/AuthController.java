@@ -30,7 +30,7 @@ public class AuthController {
         LoginResponseDTO response = authService.login(request);
 
         ResponseCookie responseCookie = ResponseCookie.from("token", response.getToken())
-                .path("/api/v1")
+                .path("/")
                 .httpOnly(true)
                 .secure(true)
                 .sameSite("None")

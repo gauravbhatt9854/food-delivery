@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Basic Setup -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Detail</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Your CSS -->
+    <link rel="stylesheet" th:href="@{/css/customer/customer-detail.css}">
+
+    <!-- JS -->
+    <script th:src="@{/js/customer/customer-detail.js}" defer></script>
+</head>
+
+<body>
+
+<button onclick="window.history.back()">
+    <i class="fa fa-arrow-left"></i> Back
+</button>
+
+<div class="detail-card">
+
+    <h2 class="title">
+        <i class="fa fa-user"></i> Customer Detail
+    </h2>
+
+    <div class="row">
+        <span class="label"><i class="fa fa-user"></i> Name</span>
+        <span class="value" th:text="${customer.customerName}"></span>
+    </div>
+
+    <div class="row">
+        <span class="label"><i class="fa fa-envelope"></i> Email</span>
+        <span class="value" th:text="${customer.customerEmail}"></span>
+    </div>
+
+    <div class="row">
+        <span class="label"><i class="fa fa-phone"></i> Phone</span>
+        <span class="value" th:text="${customer.customerPhone}"></span>
+    </div>
+
+</div>
+
+<div class="actions">
+
+    <button class="btn"
+            th:onclick="'window.location.href=\'/customers/' + ${customer.customerId} + '/addresses\''">
+        <i class="fa fa-location-dot"></i> Addresses
+    </button>
+
+    <button class="btn"
+            th:onclick="'window.location.href=\'/customers/' + ${customer.customerId} + '/orders\''">
+        <i class="fa fa-cart-shopping"></i> Orders
+    </button>
+
+    <button class="btn"
+            th:onclick="'window.location.href=\'/customers/' + ${customer.customerId} + '/analytics\''">
+        <i class="fa fa-chart-line"></i> Analytics
+    </button>
+
+</div>
+
+</body>
+</html>

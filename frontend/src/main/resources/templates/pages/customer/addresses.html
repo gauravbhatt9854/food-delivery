@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Basic Setup -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Addresses</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome (icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Your CSS -->
+    <link rel="stylesheet" th:href="@{/css/customer/addresses.css}">
+
+    <!-- JS -->
+    <script th:src="@{/js/customer/addresses.js}" defer></script>
+</head>
+
+<body>
+
+<button onclick="window.history.back()">
+    <i class="fa fa-arrow-left"></i> Back
+</button>
+
+<h2><i class="fa fa-location-dot"></i> Customer Addresses</h2>
+
+<div class="container">
+
+    <div class="card" th:each="a : ${addresses}">
+        <p><strong><i class="fa fa-road"></i> Address Line1:</strong>
+            <span th:text="${a.addressLine1}"></span>
+        </p>
+
+        <p><strong><i class="fa fa-road"></i> Address Line2:</strong>
+            <span th:text="${a.addressLine2}"></span>
+        </p>
+
+        <p><strong><i class="fa fa-city"></i> City:</strong>
+            <span th:text="${a.city}"></span>
+        </p>
+
+        <p><strong><i class="fa fa-map"></i> State:</strong>
+            <span th:text="${a.state}"></span>
+        </p>
+
+        <p><strong><i class="fa fa-envelope"></i> Pincode:</strong>
+            <span th:text="${a.postalCode}"></span>
+        </p>
+    </div>
+
+</div>
+
+</body>
+</html>

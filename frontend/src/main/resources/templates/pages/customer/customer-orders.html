@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Basic Setup -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Orders</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Your CSS -->
+    <link rel="stylesheet" th:href="@{/css/customer/orders.css}">
+
+    <!-- JS -->
+    <script th:src="@{/js/customer/orders.js}" defer></script>
+</head>
+
+<body>
+
+<button onclick="window.history.back()">
+    <i class="fa fa-arrow-left"></i> Back
+</button>
+
+<h2><i class="fa fa-cart-shopping"></i> Customer Orders</h2>
+
+<div class="container">
+
+    <div class="order-card" th:each="o : ${orders}">
+
+        <!-- Order Header -->
+        <div class="order-header">
+            <span>
+                <i class="fa fa-calendar"></i>
+                <span th:text="${#temporals.format(o.orderDate, 'dd MMM yyyy HH:mm')}"></span>
+            </span>
+
+            <span class="status"
+                  th:text="${o.orderStatus}"
+                  th:classappend="' status-' + ${o.orderStatus}">
+            </span>
+        </div>
+
+        <!-- Item Details -->
+        <div class="item">
+            <p>
+                <strong><i class="fa fa-utensils"></i> Item:</strong>
+                <span th:text="${o.itemName}"></span>
+            </p>
+
+            <p>
+                <strong><i class="fa fa-align-left"></i> Description:</strong>
+                <span th:text="${o.itemDescription}"></span>
+            </p>
+
+            <p>
+                <strong><i class="fa fa-hashtag"></i> Quantity:</strong>
+                <span th:text="${o.quantity}"></span>
+            </p>
+
+            <p>
+                <strong><i class="fa fa-indian-rupee-sign"></i> Price:</strong>
+                ₹<span th:text="${o.itemPrice}"></span>
+            </p>
+        </div>
+
+        <!-- Restaurant -->
+        <div class="restaurant">
+            <p>
+                <strong><i class="fa fa-store"></i> Restaurant:</strong>
+                <span th:text="${o.restaurantName}"></span>
+            </p>
+
+            <p>
+                <strong><i class="fa fa-location-dot"></i> Address:</strong>
+                <span th:text="${o.restaurantAddress}"></span>
+            </p>
+
+            <p>
+                <strong><i class="fa fa-phone"></i> Phone:</strong>
+                <span th:text="${o.restaurantPhone}"></span>
+            </p>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

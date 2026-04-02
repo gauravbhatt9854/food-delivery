@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Basic Setup -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customers</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Your CSS -->
+    <link rel="stylesheet" th:href="@{/css/customer/customer.css}">
+
+    <!-- JS -->
+    <script th:src="@{/js/customer/customer.js}" defer></script>
+</head>
+
+<body>
+
+<h2><i class="fa fa-users"></i> Customer List</h2>
+
+<!-- 🔍 Search -->
+<div style="margin-bottom:10px;">
+    <i class="fa fa-search"></i>
+    <input type="text" id="search" placeholder="Search customers...">
+</div>
+
+<!-- 📊 Page Size -->
+<div style="margin-bottom:10px;">
+    <label><i class="fa fa-list"></i> Page Size: </label>
+    <select id="pageSize">
+        <option value="5" th:selected="${size == 5}">5</option>
+        <option value="10" th:selected="${size == 10}">10</option>
+        <option value="20" th:selected="${size == 20}">20</option>
+    </select>
+</div>
+
+<div class="table-container">
+
+    <table border="1">
+        <thead>
+        <tr>
+            <th><i class="fa fa-hashtag"></i> Id</th>
+            <th><i class="fa fa-user"></i> Name</th>
+            <th><i class="fa fa-envelope"></i> Email</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="c : ${customers}"
+            th:onclick="'window.location.href=\'/customers/' + ${c.customerId} + '\''"
+            style="cursor: pointer;">
+
+            <td th:text="${c.customerId}"></td>
+            <td th:text="${c.customerName}"></td>
+            <td th:text="${c.customerEmail}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- 🔁 Pagination -->
+    <div class="pagination">
+
+        <!-- Prev -->
+        <button class="btn"
+                th:if="${currentPage > 0}"
+                th:onclick="'window.location.href=\'/customers?page=' + (${currentPage} - 1) + '&size=' + ${size} + '\''">
+            <i class="fa fa-arrow-left"></i> Prev
+        </button>
+
+        <!-- Page Info -->
+        <span>
+            <i class="fa fa-file"></i> Page:
+            <span th:text="${currentPage}"></span>
+        </span>
+
+        <!-- Next -->
+        <button class="btn"
+                th:onclick="'window.location.href=\'/customers?page=' + (${currentPage} + 1) + '&size=' + ${size} + '\''">
+            Next <i class="fa fa-arrow-right"></i>
+        </button>
+
+    </div>
+
+</div>
+
+</body>
+</html>

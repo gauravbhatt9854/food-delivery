@@ -4,6 +4,8 @@ import com.foodservice.constants.RestaurantConstants;
 import com.foodservice.entity.dto.ApiResponseDTO;
 import com.foodservice.entity.dto.RatingResponseDTO;
 import com.foodservice.entity.dto.RestaurantResponseDTO;
+import com.foodservice.entity.dto.TopRatedRestaurantDTO;
+import com.foodservice.service.RatingService;
 import com.foodservice.service.RestaurantService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -54,5 +56,27 @@ public class RestaurantController {
                         RestaurantConstants.STATUS_200,
                         RestaurantConstants.MESSAGE_RATINGS_FETCH_SUCCESS,
                         ratingsList));
+    }
+
+
+    //top rating
+    private final RatingService ratingService;
+
+    @GetMapping("/top-rated")
+    public ResponseEntity<ApiResponseDTO> getTopRatedRestaurants(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size
+    ) {
+
+        Page<TopRatedRestaurantDTO> data =
+                ratingService.getTopRatedRestaurants(page, size);
+
+        return ResponseEntity.ok(
+                new ApiResponseDTO(
+                        200,
+                        "Top rated restaurants fetched successfully",
+                        data
+                )
+        );
     }
 }

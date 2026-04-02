@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Order History</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" th:href="@{/css/customer-history.css}">
+</head>
+<body>
+    <div class="container-fluid">
+        <!-- Customer Information Header -->
+        <header class="customer-header slide-in-left">
+            <div class="customer-info-compact">
+                <div class="customer-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="customer-details">
+                    <h1 class="customer-name" th:text="${orderCustomerDTO.customer?.customerName ?: 'Unknown Customer'}">Customer Name</h1>
+                    <div class="customer-meta">
+                        <div class="meta-item">
+                            <i class="fas fa-envelope"></i>
+                            <span th:text="${orderCustomerDTO.customer?.customerEmail ?: 'No Email'}">email@example.com</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-phone"></i>
+                            <span th:text="${orderCustomerDTO.customer?.customerPhone ?: 'No Phone'}">+1234567890</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="order-summary">
+                    <div class="order-count">
+                        <div class="count-number" th:text="${orderCustomerDTO.orderItems?.size() ?: 0}">0</div>
+                        <div class="count-label">Total Orders</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Orders Table Section -->
+        <main class="table-container fade-in">
+            <div class="table-header">
+                <h2 class="table-title">
+                    <i class="fas fa-shopping-cart"></i>
+                    Recent Orders
+                </h2>
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="all">All Orders</button>
+                    <button class="filter-btn" data-filter="pending">Pending</button>
+                    <button class="filter-btn" data-filter="completed">Completed</button>
+                </div>
+            </div>
+
+            <div th:if="${orderCustomerDTO.orderItems == null or #lists.isEmpty(orderCustomerDTO.orderItems)}">
+                <div class="empty-state">
+                    <i class="fas fa-inbox"></i>
+                    <h3>No Orders Found</h3>
+                    <p>No orders found for this customer or the service is temporarily unavailable.</p>
+                </div>
+            </div>
+
+            <div th:unless="${orderCustomerDTO.orderItems == null or #lists.isEmpty(orderCustomerDTO.orderItems)}">
+                <table class="orders-table">
+                    <thead>
+                        <tr>
+                            <th>Order Date</th>
+                            <th>Item Details</th>
+                            <th>Restaurant</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="orderItem : ${orderCustomerDTO.orderItems}">
+                            <td class="date-cell">
+                                <div class="date-badge">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    <span th:text="${#temporals.format(orderItem.orderDate, 'MMM dd, yyyy')}">Date</span>
+                                </div>
+                            </td>
+                            <td class="item-cell">
+                                <div class="item-name" th:text="${orderItem.itemName}">Item Name</div>
+                                <div class="item-description" th:text="${orderItem.itemDescription}">Item Description</div>
+                            </td>
+                            <td class="restaurant-cell">
+                                <div class="restaurant-info">
+                                    <div class="restaurant-name" th:text="${orderItem.restaurantName}">Restaurant Name</div>
+                                    <div class="restaurant-detail">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        <span th:text="${orderItem.restaurantAddress}">Address</span>
+                                    </div>
+                                    <div class="restaurant-detail">
+                                        <i class="fas fa-phone"></i>
+                                        <span th:text="${orderItem.restaurantPhone}">Phone</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="quantity-cell">
+                                <span class="quantity-badge" th:text="${orderItem.quantity}">1</span>
+                            </td>
+                            <td class="price-cell">
+                                <div class="price-tag" th:text="'$' + ${orderItem.itemPrice}">$0.00</div>
+                            </td>
+                            <td class="price-cell">
+                                <div class="price-tag" th:text="'$' + ${orderItem.itemPrice * orderItem.quantity}">$0.00</div>
+                            </td>
+                            <td class="status-cell">
+                                <span class="status-badge"
+                                      th:classappend="${orderItem.orderStatus == 'COMPLETED' ? 'status-completed' :
+                                                     orderItem.orderStatus == 'PENDING' ? 'status-pending' :
+                                                     'status-cancelled'}"
+                                      th:text="${orderItem.orderStatus}">
+                                    Status
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+
+        <!-- Summary Section -->
+        <section class="summary-section" th:unless="${orderCustomerDTO.orderItems == null or #lists.isEmpty(orderCustomerDTO.orderItems)}">
+            <div class="summary-grid">
+                <div class="summary-card orders slide-in-left">
+                    <div class="summary-icon">
+                        <i class="fas fa-receipt"></i>
+                    </div>
+                    <div class="summary-value" th:text="${orderCustomerDTO.orderItems?.size() ?: 0}">0</div>
+                    <div class="summary-label">Total Orders</div>
+                </div>
+
+                <div class="summary-card spent slide-in-left">
+                    <div class="summary-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="summary-value" th:text="'$' + (${#aggregates.sum(orderCustomerDTO.orderItems.![itemPrice * quantity]) ?: 0})">$0.00</div>
+                    <div class="summary-label">Total Spent</div>
+                </div>
+
+                <div class="summary-card items slide-in-right">
+                    <div class="summary-icon">
+                        <i class="fas fa-box"></i>
+                    </div>
+                    <div class="summary-value" th:text="${#aggregates.sum(orderCustomerDTO.orderItems.![quantity]) ?: 0}">0</div>
+                    <div class="summary-label">Total Items</div>
+                </div>
+
+                <div class="summary-card completed slide-in-right">
+                    <div class="summary-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="summary-value" th:text="${#lists.size(orderCustomerDTO.orderItems.?[orderStatus == 'COMPLETED']) ?: 0}">0</div>
+                    <div class="summary-label">Completed Orders</div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Custom JavaScript -->
+    <script th:src="@{/js/customer-history.js}"></script>
+</body>
+</html>

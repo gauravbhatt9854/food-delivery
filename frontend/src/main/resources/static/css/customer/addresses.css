@@ -1,0 +1,45 @@
+:root {
+    --primary: hsl(108, 23%, 58%);
+    --secondary: hsl(102, 41%, 67%);
+    --accent: hsl(105, 53%, 83%);
+    --bg-light: hsl(75, 74%, 86%);
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg-light);
+    padding: 20px;
+
+}
+
+h2 {
+    text-align: center;
+    color: var(--primary);
+}
+
+/* Container */
+.container {
+    width: 70%;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+/* Address card */
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    transition: 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    background: var(--accent);
+}
+
+.card p {
+    margin: 8px 0;
+}

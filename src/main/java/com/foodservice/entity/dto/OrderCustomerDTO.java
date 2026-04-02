@@ -9,6 +9,6 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class OrderCustomerDTO {
-    private Customer customer;
+    private CustomerDTO customer;
     private List<OrderItemDetailDTO> orderItems;
 }

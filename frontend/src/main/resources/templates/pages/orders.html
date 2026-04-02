@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/orders-base :: html(
+        title = ~{::title},
+        content = ~{::content}
+      )}">
+<head>
+    <title th:fragment="title">Orders — Details</title>
+</head>
+
+<body>
+<div th:fragment="content" class="app-shell">
+    <!-- ── SIDEBAR ───────────────────────────────────────────────────── -->
+    <aside>
+        <div th:replace="~{fragments/orders/sidebar :: sidebar}"></div>
+    </aside>
+
+    <!-- ── MAIN ──────────────────────────────────────────────────────── -->
+    <div class="main">
+        <!-- TOP BAR -->
+        <div th:replace="~{fragments/orders/topbar :: topbar}"></div>
+
+        <!-- CONTENT -->
+        <div class="content fade-up">
+            <!-- CUSTOMER CARD -->
+            <div th:replace="~{fragments/orders/customer-card :: customer-card}"></div>
+
+            <!-- FILTERS BAR -->
+            <div th:replace="~{fragments/orders/filters-bar :: filters-bar}"></div>
+
+            <!-- TABLE CARD -->
+            <div th:replace="~{fragments/orders/orders-table :: orders-table}"></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

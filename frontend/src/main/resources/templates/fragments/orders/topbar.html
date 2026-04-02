@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div class="topbar" th:fragment="topbar">
+    <div>
+        <div class="page-title">Order Details</div>
+        <div class="topbar-stats" id="topbar-stats">
+            <span class="topbar-stat">
+                <span class="topbar-stat-dot" style="background:hsl(111,35%,55%)"></span>
+                <span th:with="deliveredCount=${orderCustomerDTO != null and orderCustomerDTO.orderDetails != null and orderCustomerDTO.orderDetails.content != null ? #lists.size(orderCustomerDTO.orderDetails.content.?[orderStatus == 'Delivered']) : 0}" 
+                      th:text="${deliveredCount} + ' Delivered'">0 Delivered</span>
+            </span>
+            <span class="topbar-stat-sep">·</span>
+            <span class="topbar-stat">
+                <span class="topbar-stat-dot" style="background:hsl(40,70%,55%)"></span>
+                <span th:with="pendingCount=${orderCustomerDTO != null and orderCustomerDTO.orderDetails != null and orderCustomerDTO.orderDetails.content != null ? #lists.size(orderCustomerDTO.orderDetails.content.?[orderStatus == 'Pending']) : 0}" 
+                      th:text="${pendingCount} + ' In Progress'">0 Pending</span>
+            </span>
+        </div>
+    </div>
+    <div class="topbar-actions">
+
+        <!-- Inline lookup bar — expands on button click -->
+        <div class="lookup-bar" id="lookup-bar">
+            <!-- Input -->
+            <div class="lookup-input-wrap">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <circle cx="11" cy="11" r="8"/>
+                    <path d="m21 21-4.35-4.35"/>
+                </svg>
+                <input class="lookup-input" id="lookup-input" type="text"
+                       placeholder="Customer ID…"
+                       onkeydown="if(event.key==='Enter') submitLookup(); if(event.key==='Escape') closeLookup();" />
+            </div>
+
+            <!-- Go button -->
+            <button class="btn btn-primary" style="padding:8px 14px; flex-shrink:0;" onclick="submitLookup()">
+                Fetch
+            </button>
+
+            <!-- Close -->
+            <button class="lookup-close" onclick="closeLookup()" title="Close">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M18 6 6 18M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+
+        <button class="btn btn-ghost" id="lookup-trigger-btn" onclick="openLookup()">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <circle cx="11" cy="11" r="8"/>
+                <path d="m21 21-4.35-4.35"/>
+            </svg>
+            Look Up Customer
+        </button>
+    </div>
+</div>
+</html>

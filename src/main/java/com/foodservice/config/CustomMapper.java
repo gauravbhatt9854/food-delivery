@@ -11,6 +11,7 @@ public class CustomMapper {
 
     public static CustomerDTO customerToCustomerDTO(Customer customer) {
         CustomerDTO dto = new CustomerDTO();
+        dto.setCustomerId(customer.getCustomerId());
         dto.setCustomerName(customer.getCustomerName());
         dto.setCustomerEmail(customer.getCustomerEmail());
         dto.setCustomerPhone(customer.getCustomerPhone());

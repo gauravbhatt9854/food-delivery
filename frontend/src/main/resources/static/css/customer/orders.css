@@ -1,0 +1,75 @@
+:root {
+    --primary: hsl(108, 23%, 58%);
+    --secondary: hsl(102, 41%, 67%);
+    --accent: hsl(105, 53%, 83%);
+    --bg-light: hsl(75, 74%, 86%);
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg-light);
+    padding: 20px;
+}
+
+h2 {
+    text-align: center;
+    color: var(--primary);
+}
+
+/* Container */
+.container {
+    width: 70%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Order Card */
+.order-card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+/* Header */
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+/* Status */
+.status {
+    padding: 5px 10px;
+    border-radius: 8px;
+    font-size: 12px;
+}
+
+.status-DELIVERED {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-PENDING {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-CANCELLED {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* Sections */
+.item, .restaurant {
+    margin-top: 10px;
+    padding: 10px;
+    background: var(--accent);
+    border-radius: 8px;
+}
+
+.status-Pending { color: orange; }
+.status-Delivered { color: green; }

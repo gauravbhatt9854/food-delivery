@@ -2,10 +2,12 @@ package com.foodservice.controller;
 import com.foodservice.entity.dto.*;
 import com.foodservice.service.CustomerService;
 import com.foodservice.constants.CustomerConstant;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,6 +16,7 @@ import java.util.List;
 @RequestMapping("/api/v1/customers")
 @RequiredArgsConstructor
 @Slf4j
+@Validated
 public class CustomerController {
 
     private final CustomerService customerService;
@@ -76,8 +79,8 @@ public class CustomerController {
 
     @GetMapping
     public ResponseEntity<ApiResponseDTO> getAllCustomers(
-            @RequestParam(name = "page", defaultValue = "0") Integer page,
-            @RequestParam(name = "size", defaultValue = "5") Integer size
+            @RequestParam(name = "page", defaultValue = "0") @Min(0) Integer page,
+            @RequestParam(name = "size", defaultValue = "5") @Min(1) Integer size
     ) {
 
         log.info("Received request to fetch all customers");

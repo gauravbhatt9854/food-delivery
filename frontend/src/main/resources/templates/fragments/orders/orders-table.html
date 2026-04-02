@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div class="table-card" th:fragment="orders-table">
+    <div class="table-header">
+        <span class="table-header-title">Order Items</span>
+        <span class="table-header-count" th:text="${#lists.size(orderCustomerDTO.orderDetails.content) + ' items'}">— items</span>
+    </div>
+
+    <div class="table-scroll">
+        <table id="orders-table">
+            <thead>
+                <tr>
+                    <th data-col="orderDate" class="sorted">
+                        Date
+                        <span class="sort-icon">
+                            <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor">
+                                <path d="M5 1l3 3H2L5 1zm0 8L2 6h6L5 9z"/>
+                            </svg>
+                        </span>
+                    </th>
+                    <th data-col="itemName">Item</th>
+                    <th data-col="restaurantName">Restaurant</th>
+                    <th data-col="quantity">Qty</th>
+                    <th data-col="itemPrice">Price</th>
+                    <th data-col="orderStatus">Status</th>
+                </tr>
+            </thead>
+            <tbody id="table-body">
+                <tr th:each="item : ${orderCustomerDTO.orderDetails.content}">
+                    <td>
+                        <div class="date-primary" th:text="${#temporals.format(item.orderDate,'dd MMM yyyy')}"></div>
+                        <div class="date-secondary" th:text="${#temporals.format(item.orderDate,'HH:mm')}"></div>
+                    </td>
+                    <td>
+                        <div class="item-name" th:text="${item.itemName}"></div>
+                        <div class="item-desc" th:text="${item.itemDescription}" th:title="${item.itemDescription}"></div>
+                    </td>
+                    <td>
+                        <div class="restaurant-name" th:text="${item.restaurantName}"></div>
+                        <div class="restaurant-phone" th:text="${item.restaurantPhone}"></div>
+                        <div class="address-text" th:text="${item.restaurantAddress}" th:title="${item.restaurantAddress}"></div>
+                    </td>
+                    <td><span class="qty-badge" th:text="${item.quantity}"></span></td>
+                    <td><span class="price" th:text="'₹ ' + ${item.itemPrice}"></span></td>
+                    <td>
+                        <span th:class="'status-pill status-' + ${item.orderStatus.toLowerCase()}"
+                              th:text="${item.orderStatus}"></span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="empty-state" id="empty-state" style="display:none" th:if="${#lists.isEmpty(orderCustomerDTO.orderDetails.content)}">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+            </svg>
+            <p>No orders found for this customer.</p>
+        </div>
+    </div>
+
+    <!-- PAGINATION -->
+    <div class="pagination-bar">
+        <div class="page-info">
+            Showing <strong th:text="${#lists.size(orderCustomerDTO.orderDetails.content)}">0</strong> items
+        </div>
+        <div class="page-controls" id="page-controls">
+            <!-- Thymeleaf pagination implementation -->
+            <th:block th:with="totalPages=${orderCustomerDTO.orderDetails.page.totalPages}, 
+                              currentPage=${orderCustomerDTO.orderDetails.page.number},
+                              customerIdParam=${param.customerId ?: customerId},
+                              rowsPerPageParam=${param.size ?: 5}">
+                
+                <!-- Previous button -->
+                <button class="page-btn" 
+                        th:classappend="${currentPage <= 0} ? 'disabled' : ''"
+                        th:disabled="${currentPage <= 0}"
+                        th:onclick="'goPage(' + (${currentPage} - 1) + ')'">
+                    ‹
+                </button>
+
+                <!-- Page numbers with ellipsis logic -->
+                <th:block th:if="${totalPages <= 3}">
+                    <button th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}"
+                            class="page-btn"
+                            th:classappend="${pageNum == currentPage} ? 'active' : ''"
+                            th:onclick="'goPage(' + ${pageNum} + ')'"
+                            th:text="${pageNum + 1}">
+                    </button>
+                </th:block>
+
+                <th:block th:if="${totalPages > 3}">
+                    <!-- Current page (always highlighted) -->
+                    <button class="page-btn active"
+                            th:text="${currentPage + 1}"></button>
+                </th:block>
+
+                <!-- Next button -->
+                <button class="page-btn" 
+                        th:classappend="${currentPage >= totalPages - 1} ? 'disabled' : ''"
+                        th:disabled="${currentPage >= totalPages - 1}"
+                        th:onclick="'goPage(' + (${currentPage} + 1) + ')'">
+                    ›
+                </button>
+                
+                <!-- Page info text -->
+                <div class="page-info" th:if="${totalPages > 0}" style="margin-left: 1rem;">
+                    Page <strong th:text="${currentPage + 1}">1</strong> of <strong th:text="${totalPages}">1</strong>
+                </div>
+            </th:block>
+        </div>
+    </div>
+</div>
+</html>

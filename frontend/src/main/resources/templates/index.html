@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Service - Home</title>
+    <link rel="stylesheet" href="/css/orders/orders.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="home-card">
+
+        <!-- Main Content -->
+        <main class="main">
+            <!-- Top Bar -->
+            <header class="topbar">
+                <div>
+                    <h1 class="page-title">Home</h1>
+                    <div class="topbar-stats">
+                        <div class="topbar-stat">
+                            <div class="topbar-stat-dot" style="background: hsl(111, 35%, 38%);"></div>
+                            <span>System Active</span>
+                        </div>
+                        <span class="topbar-stat-sep">|</span>
+                        <div class="topbar-stat">
+                            <span>Today</span>
+                        </div>
+                    </div>
+                </div>
+
+            </header>
+
+            <!-- Content Area -->
+            <div class="content">
+                <!-- Welcome Section -->
+                <div class="welcome-card fade-up">
+                    <div class="welcome-content">
+                        <h2 class="welcome-title">Welcome to Food Service</h2>
+                        <p class="welcome-subtitle">Manage your restaurant operations with ease</p>
+
+                    </div>
+                    <div class="welcome-visual">
+                        <div class="floating-card card-1">
+                            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                            </svg>
+                        </div>
+                        <div class="floating-card card-2">
+                            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                        </div>
+                        <div class="floating-card card-3">
+                            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="actions-section">
+                    <h3 class="section-title">Quick Actions</h3>
+                    <div class="action-grid">
+                        <a href="/orders/customer" class="action-card">
+                            <div class="action-icon">
+                                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+                                </svg>
+                            </div>
+                            <div class="action-content">
+                                <h4>Aman Patel</h4>
+                                <p>APIs implementated by Aman Patel</p>
+                            </div>
+                        </a>
+                        <a href="#" class="action-card">
+                            <div class="action-icon">
+                                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path d="M16 18l-6-6-6 6"/>
+                                    <path d="M22 12h-4l-6 6-6-6H2"/>
+                                </svg>
+                            </div>
+                            <div class="action-content">
+                                <h4>Aman Kumar</h4>
+                                <p>APIs implementated by Aman Kumar</p>
+                            </div>
+                        </a>
+                        <a href="#" class="action-card">
+                            <div class="action-icon">
+                                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                                </svg>
+                            </div>
+                            <div class="action-content">
+                                <h4>Gaurav</h4>
+                                <p>APIs implementated by Gaurav</p>
+                            </div>
+                        </a>
+                        <a href="#" class="action-card">
+                            <div class="action-icon">
+                                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            </div>
+                            <div class="action-content">
+                                <h4>Navneet</h4>
+                                <p>APIs implementated by Navneet</p>
+                            </div>
+                        </a>
+
+                        <a href="#" class="action-card">
+                            <div class="action-icon">
+                                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                </svg>
+                            </div>
+                            <div class="action-content">
+                                <h4>Samar</h4>
+                                <p>APIs implementated by Samar</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <style>
+        /* Home Page Specific Styles */
+        .welcome-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-xl);
+            padding: 40px;
+            margin-bottom: 32px;
+            box-shadow: var(--shadow-elevated);
+            display: flex;
+            align-items: center;
+            gap: 48px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--color-text-primary);
+            margin-bottom: 8px;
+            letter-spacing: -0.8px;
+        }
+
+        .welcome-subtitle {
+            font-size: 18px;
+            color: var(--color-text-secondary);
+            margin-bottom: 32px;
+        }
+
+        .welcome-stats {
+            display: flex;
+            gap: 48px;
+        }
+
+        .home-card {
+            width: 80%;
+            margin: 0 auto;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--color-sage);
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: var(--color-text-tertiary);
+            font-weight: 500;
+        }
+
+        .welcome-visual {
+            position: relative;
+            flex-shrink: 0;
+            width: 200px;
+            height: 200px;
+        }
+
+        .floating-card {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: var(--color-surface-2);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-card);
+        }
+
+        .floating-card svg {
+            width: 24px;
+            height: 24px;
+            color: var(--color-sage);
+        }
+
+        .card-1 {
+            top: 20px;
+            left: 20px;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .card-2 {
+            top: 80px;
+            right: 30px;
+            animation: float 6s ease-in-out infinite 2s;
+        }
+
+        .card-3 {
+            bottom: 30px;
+            left: 40px;
+            animation: float 6s ease-in-out infinite 4s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .actions-section, .activity-section {
+            margin-bottom: 32px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--color-text-primary);
+            margin-bottom: 20px;
+            letter-spacing: -0.3px;
+        }
+
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .action-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-xl);
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            text-decoration: none;
+            transition: all var(--transition);
+            box-shadow: var(--shadow-card);
+        }
+
+        .action-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-elevated);
+            border-color: var(--color-sage-light);
+        }
+
+        .action-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--color-accent-glow);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .action-icon svg {
+            width: 20px;
+            height: 20px;
+            color: var(--color-sage);
+        }
+
+        .action-content h4 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--color-text-primary);
+            margin-bottom: 4px;
+        }
+
+        .action-content p {
+            font-size: 13px;
+            color: var(--color-text-secondary);
+        }
+
+        .activity-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-xl);
+            padding: 24px;
+            box-shadow: var(--shadow-card);
+        }
+
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            background: var(--color-surface-2);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--color-border-soft);
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .activity-icon svg {
+            width: 18px;
+            height: 18px;
+            color: #fff;
+        }
+
+        .activity-icon.delivered {
+            background: hsl(111, 35%, 38%);
+        }
+
+        .activity-icon.pending {
+            background: hsl(40, 70%, 40%);
+        }
+
+        .activity-icon.processing {
+            background: hsl(210, 60%, 42%);
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--color-text-primary);
+            margin-bottom: 2px;
+        }
+
+        .activity-time {
+            font-size: 12px;
+            color: var(--color-text-tertiary);
+        }
+
+        @media (max-width: 900px) {
+            .welcome-card {
+                flex-direction: column;
+                gap: 32px;
+                padding: 32px 24px;
+            }
+
+            .welcome-visual {
+                width: 160px;
+                height: 160px;
+            }
+
+            .welcome-stats {
+                gap: 32px;
+            }
+
+            .action-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</body>
+</html>

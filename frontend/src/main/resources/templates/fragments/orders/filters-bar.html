@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div class="filters-bar" th:fragment="filters-bar">
+    <!-- Search -->
+    <div class="search-wrap">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8"/>
+            <path d="m21 21-4.35-4.35"/>
+        </svg>
+        <input class="search-input" id="search-input" type="search" placeholder="Search items, restaurants…" autocomplete="off" oninput="searchFilterChange(event)" />
+    </div>
+
+    <div class="divider-v"></div>
+
+    <!-- Status Filter -->
+    <select class="filter-select" id="status-filter" onChange="statusFilterChange(event)">
+        <option value="">All Statuses</option>
+        <option value="Delivered">Delivered</option>
+        <option value="Pending">Pending</option>
+    </select>
+
+    <!-- Sort -->
+    <select class="filter-select" id="sort-filter"  onChange="sortFilterChange(event)">
+        <option value="">Sort</option>
+        <option value="mi.itemPrice,asc">Price ↓</option>
+        <option value="mi.itemPrice,desc">Price ↑</option>
+    </select>
+
+    <div class="divider-v"></div>
+
+    <!-- Rows per page -->
+    <select class="filter-select" id="rows-select">
+        <option value="5" th:selected="${orderCustomerDTO.orderDetails.page.size == 5}">5 / page</option>
+        <option value="10" th:selected="${orderCustomerDTO.orderDetails.page.size == 10}">10 / page</option>
+        <option value="20" th:selected="${orderCustomerDTO.orderDetails.page.size == 20}">20 / page</option>
+        <option value="50" th:selected="${orderCustomerDTO.orderDetails.page.size == 50}">50 / page</option>
+    </select>
+</div>
+</html>
