@@ -81,4 +81,16 @@ public class CustomerServiceImpl implements CustomerService {
 
         return apiGetRequest.get(url, params, token, typeRef);
     }
+
+    @Override
+    public List<CustomerDTO> getCustomerByCiy(Map<String, String> params, String token) {
+        ApiGetRequest<List<CustomerDTO>> apiGetRequest = new ApiGetRequest<>(webClient);
+
+        String url = "/customers/city";
+
+        ParameterizedTypeReference<ApiResponseDTO<List<CustomerDTO>>> typeRef =
+                new ParameterizedTypeReference<>() {};
+
+        return apiGetRequest.get(url, params, token, typeRef);
+    }
 }

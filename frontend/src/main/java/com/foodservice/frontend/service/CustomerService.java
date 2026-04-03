@@ -16,4 +16,6 @@ public interface CustomerService {
     List<OrderItemDetailDTO> getOrders(Integer id, Map<String, String> params, String token);
 
     CustomerAnalyticsDTO getAnalytics(Integer id, Map<String, String> params, String token);
+
+    List<CustomerDTO> getCustomerByCiy(Map<String, String> params, String token);
 }

@@ -44,6 +44,7 @@ public class CustomerController {
     public ResponseEntity<ApiResponseDTO> getAddressesByCustomerId(@PathVariable Integer customerId) {
 
         log.info("Received request to fetch delivery addresses for customer. customerId={}", customerId);
+        customerService.getCustomerById(customerId);
 
         List<DeliveryAddressDTO> addresses = customerService.getAddressesByCustomerId(customerId);
 
@@ -64,6 +65,7 @@ public class CustomerController {
 
         log.info("Received request to fetch orders for customer. customerId={}", customerId);
 
+        customerService.getCustomerById(customerId);
         List<OrderItemDetailDTO> orders = customerService.getOrdersByCustomerId(customerId);
 
         log.debug("Successfully fetched orders for customer. customerId={}, ordersData={}", customerId, orders);
@@ -99,11 +101,14 @@ public class CustomerController {
     }
 
     @GetMapping("/city")
-    public ResponseEntity<ApiResponseDTO> getCustomersByCity(@RequestParam String city) {
+    public ResponseEntity<ApiResponseDTO> getCustomersByCity(
+            @RequestParam String city ,
+            @RequestParam(name = "page", defaultValue = "0") @Min(0) Integer page,
+            @RequestParam(name = "size", defaultValue = "5") @Min(1) Integer size ) {
 
         log.info("Received request to fetch customers by city. city={}", city);
 
-        List<CustomerDTO> customersByCity = customerService.getCustomersByCity(city);
+        List<CustomerDTO> customersByCity = customerService.getCustomersByCity(city , page , size);
 
         log.debug("Successfully fetched customers by city. city={}, resultCount={}", city, customersByCity.size());
 
@@ -121,6 +126,7 @@ public class CustomerController {
 
         log.info("Received request to fetch address count for customer. customerId={}", customerId);
 
+        customerService.getCustomerById(customerId);
         Integer addressCount = customerService.getAddressCount(customerId);
 
         log.debug("Successfully fetched address count. customerId={}, addressCount={}", customerId, addressCount);
@@ -139,6 +145,7 @@ public class CustomerController {
 
         log.info("Received request to fetch customer analytics. customerId={}", customerId);
 
+        customerService.getCustomerById(customerId);
         CustomerAnalyticsDTO analytics = customerService.getCustomerAnalytics(customerId);
 
         log.debug("Successfully fetched customer analytics. customerId={}, analyticsData={}", customerId, analytics);
