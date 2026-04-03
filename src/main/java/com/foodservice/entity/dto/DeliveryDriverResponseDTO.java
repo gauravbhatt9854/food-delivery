@@ -15,9 +15,26 @@ public class DeliveryDriverResponseDTO {
     private String driverVehicle;
 
     private Integer orderId;
-    private String customerName;
     private String resturentName;
+    private Integer resturentId;
+	private Integer customerId;
+	private String customerName;
     private String orderStatus;
+    
+    
+	public DeliveryDriverResponseDTO() {
+		super();
+		this.driverId = driverId;
+		this.driverName = driverName;
+		this.driverPhone = driverPhone;
+		this.driverVehicle = driverVehicle;
+		this.orderId = orderId;
+		this.resturentId = resturentId;
+		this.customerId = customerId;
+		this.customerName= customerName;
+		this.resturentName = resturentName;
+		this.orderStatus = orderStatus;
+	}
 	public Integer getDriverId() {
 		return driverId;
 	}
@@ -48,11 +65,11 @@ public class DeliveryDriverResponseDTO {
 	public void setOrderId(Integer orderId) {
 		this.orderId = orderId;
 	}
-	public String getCustomerName() {
-		return customerName;
+	public Integer getCustomerId() {
+		return customerId;
 	}
-	public void setCustomerName(String customerName) {
-		this.customerName = customerName;
+	public void setCustomerId(Integer customerId) {
+		this.customerId = customerId;
 	}
 	public String getResturentName() {
 		return resturentName;
@@ -65,5 +82,17 @@ public class DeliveryDriverResponseDTO {
 	}
 	public void setOrderStatus(String orderStatus) {
 		this.orderStatus = orderStatus;
+	}
+	public Integer getResturentId() {
+		return resturentId;
+	}
+	public void setResturentId(Integer resturentId) {
+		this.resturentId = resturentId;
+	}
+	public String getCustomerName() {
+		return customerName;
+	}
+	public void setCustomerName(String customerName) {
+		this.customerName = customerName;
 	}
 }
