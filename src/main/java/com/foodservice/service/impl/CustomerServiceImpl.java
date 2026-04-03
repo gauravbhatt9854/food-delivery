@@ -12,6 +12,7 @@ import com.foodservice.repository.DeliveryAddressRepository;
 import com.foodservice.repository.OrderRepository;
 import com.foodservice.service.CustomerService;
 import com.foodservice.constants.CustomerErrorConstant;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -49,33 +50,21 @@ public class CustomerServiceImpl implements CustomerService {
         Pageable pageable = PageRequest.of(page, size);
         Page<Customer> customers = customerRepository.findAll(pageable);
 
-        if (customers.isEmpty()) {
-            throw new ResourceNotFoundException(
-                    CustomerErrorConstant.NO_CUSTOMERS_FOUND
-            );
-        }
+        return customers
+                .map(CustomMapper::customerToCustomerDTO)
+                .getContent();   //  convert Page → List
+    }
+
+
+    @Override
+    public List<CustomerDTO> getCustomersByCity(String city, @Min(0) Integer page, @Min(1) Integer size) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<Customer> customers = customerRepository.findCustomersByCity(city , pageable);
 
         return customers
                 .map(CustomMapper::customerToCustomerDTO)
-                .getContent();   // ✅ convert Page → List
-    }
-
-    @Override
-    public List<CustomerDTO> getCustomersByCity(String city) {
-        List<CustomerDTO> customers = addressRepository.findByCityIgnoreCase(city)
-                .stream()
-                .map(DeliveryAddress::getCustomer)
-                .distinct()
-                .map(CustomMapper::customerToCustomerDTO)
-                .toList();
-
-        if (customers.isEmpty()) {
-            throw new ResourceNotFoundException(
-                    String.format(CustomerErrorConstant.NO_CUSTOMERS_FOUND_IN_CITY, city)
-            );
-        }
-
-        return customers;
+                .getContent();   //  convert Page → List
     }
 
     @Override
@@ -96,7 +85,7 @@ public class CustomerServiceImpl implements CustomerService {
         List<OrderItemDetailDTO> items =
                 orderRepository.getOrderDetailsByCustomerId(customerId);
 
-        if (items == null || items.isEmpty()) {
+        if (items == null) {
             throw new ResourceNotFoundException(
                     String.format(CustomerErrorConstant.NO_ORDER_DATA_FOUND, customerId)
             );
@@ -134,12 +123,6 @@ public class CustomerServiceImpl implements CustomerService {
                 deliveryAddressRepository.findByCustomerCustomerId(customerId)
                         .stream().map(CustomMapper::deliveryAddressToDTO)
                         .toList();
-
-        if (deliveryAddressDTOS.isEmpty()) {
-            throw new ResourceNotFoundException(
-                    String.format(DeliveryAddressErrorConstant.NO_ADDRESSES_FOUND_FOR_CUSTOMER, customerId)
-            );
-        }
 
         return deliveryAddressDTOS;
     }

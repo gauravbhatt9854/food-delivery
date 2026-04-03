@@ -49,6 +49,17 @@ public class CustomerController {
         return "pages/customer/addresses";
     }
 
+//    get customer by city
+    @GetMapping("/city")
+    public String getCustomerByCiy(
+            @RequestParam Map<String, String> params,
+            @CookieValue(name = "token", required = false) String token,
+            Model model) {
+
+        model.addAttribute("customers", customerService.getCustomerByCiy(params, token));
+        return "pages/customer/customers";
+    }
+
     @GetMapping("/{id}/orders")
     public String getOrders(
             @PathVariable Integer id,

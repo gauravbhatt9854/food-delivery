@@ -12,75 +12,92 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Your CSS -->
-    <link rel="stylesheet" th:href="@{/css/customer/orders.css}">
+    <!-- Tailwind CSS -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 
     <!-- JS -->
     <script th:src="@{/js/customer/orders.js}" defer></script>
 </head>
 
-<body>
+<body class="bg-gray-100 font-[Inter] p-6">
 
-<button onclick="window.history.back()">
+<!-- Back Button -->
+<button onclick="window.history.back()"
+        class="flex items-center gap-2 px-4 py-2 bg-gray-800 text-white rounded-lg shadow hover:bg-gray-700 transition mb-6">
     <i class="fa fa-arrow-left"></i> Back
 </button>
 
-<h2><i class="fa fa-cart-shopping"></i> Customer Orders</h2>
+<!-- Heading -->
+<h2 class="text-2xl font-semibold text-gray-800 mb-6">
+    <i class="fa fa-cart-shopping text-blue-500"></i> Customer Orders
+</h2>
 
-<div class="container">
+<!-- Container -->
+<div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
 
-    <div class="order-card" th:each="o : ${orders}">
+    <!-- Order Card -->
+    <div class="bg-white rounded-xl shadow-md p-5 hover:shadow-lg transition"
+         th:each="o : ${orders}">
 
-        <!-- Order Header -->
-        <div class="order-header">
-            <span>
-                <i class="fa fa-calendar"></i>
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-4">
+
+            <span class="text-sm text-gray-600 flex items-center gap-2">
+                <i class="fa fa-calendar text-blue-500"></i>
                 <span th:text="${#temporals.format(o.orderDate, 'dd MMM yyyy HH:mm')}"></span>
             </span>
 
-            <span class="status"
-                  th:text="${o.orderStatus}"
-                  th:classappend="' status-' + ${o.orderStatus}">
+            <!-- Status Badge -->
+            <span th:text="${o.orderStatus}"
+                  th:class="'px-3 py-1 text-xs font-semibold rounded-full ' +
+                            (${o.orderStatus} == 'DELIVERED' ? 'bg-green-100 text-green-700' :
+                            (${o.orderStatus} == 'PENDING' ? 'bg-yellow-100 text-yellow-700' :
+                            (${o.orderStatus} == 'CANCELLED' ? 'bg-red-100 text-red-700' :
+                            'bg-gray-100 text-gray-700')))">
             </span>
+
         </div>
 
-        <!-- Item Details -->
-        <div class="item">
+        <!-- Item -->
+        <div class="mb-4 space-y-1 text-sm text-gray-700">
             <p>
-                <strong><i class="fa fa-utensils"></i> Item:</strong>
+                <strong><i class="fa fa-utensils text-purple-500"></i> Item:</strong>
                 <span th:text="${o.itemName}"></span>
             </p>
 
             <p>
-                <strong><i class="fa fa-align-left"></i> Description:</strong>
+                <strong><i class="fa fa-align-left text-gray-500"></i> Description:</strong>
                 <span th:text="${o.itemDescription}"></span>
             </p>
 
             <p>
-                <strong><i class="fa fa-hashtag"></i> Quantity:</strong>
+                <strong><i class="fa fa-hashtag text-blue-500"></i> Quantity:</strong>
                 <span th:text="${o.quantity}"></span>
             </p>
 
             <p>
-                <strong><i class="fa fa-indian-rupee-sign"></i> Price:</strong>
+                <strong><i class="fa fa-indian-rupee-sign text-green-500"></i> Price:</strong>
                 ₹<span th:text="${o.itemPrice}"></span>
             </p>
         </div>
 
+        <!-- Divider -->
+        <div class="border-t my-3"></div>
+
         <!-- Restaurant -->
-        <div class="restaurant">
+        <div class="space-y-1 text-sm text-gray-700">
             <p>
-                <strong><i class="fa fa-store"></i> Restaurant:</strong>
+                <strong><i class="fa fa-store text-blue-500"></i> Restaurant:</strong>
                 <span th:text="${o.restaurantName}"></span>
             </p>
 
             <p>
-                <strong><i class="fa fa-location-dot"></i> Address:</strong>
+                <strong><i class="fa fa-location-dot text-red-500"></i> Address:</strong>
                 <span th:text="${o.restaurantAddress}"></span>
             </p>
 
             <p>
-                <strong><i class="fa fa-phone"></i> Phone:</strong>
+                <strong><i class="fa fa-phone text-green-500"></i> Phone:</strong>
                 <span th:text="${o.restaurantPhone}"></span>
             </p>
         </div>

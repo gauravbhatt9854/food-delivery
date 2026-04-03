@@ -27,6 +27,7 @@ public interface RatingRepository extends JpaRepository<Rating, Integer> {
     )
     FROM Rating r
     GROUP BY r.restaurant.restaurantId
+    ORDER BY AVG(r.rating) DESC
 """)
     Page<TopRatedRestaurantDTO> getTopRatedRestaurants(Pageable pageable);
 }

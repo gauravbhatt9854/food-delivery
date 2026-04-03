@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error - Food Service</title>
+    <link rel="stylesheet" href="/css/orders/orders.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-card">
+            <!-- Error Icon -->
+            <div class="error-icon">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.932-3L13.932 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.932 3z"/>
+                </svg>
+            </div>
+
+            <!-- Error Message -->
+            <div class="error-content">
+                <h1 class="error-title" th:text="${errorTitle != null ? errorTitle : 'Oops! Something went wrong'}">
+                    Oops! Something went wrong
+                </h1>
+                
+                <p class="error-message" th:text="${errorMessage != null ? errorMessage : 'An unexpected error occurred. Please try again later.'}">
+                    An unexpected error occurred. Please try again later.
+                </p>
+
+                <!-- Error Details (Optional) -->
+                <div th:if="${errorDetails != null}" class="error-details">
+                    <small th:text="${errorDetails}"></small>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="error-actions">
+                
+                <a href="/" class="btn btn-ghost">
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                    </svg>
+                    Go to Home
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        /* Error Page Styles */
+        .error-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--color-bg);
+            padding: 20px;
+        }
+
+        .error-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-xl);
+            padding: 48px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            box-shadow: var(--shadow-elevated);
+        }
+
+        .error-icon {
+            width: 80px;
+            height: 80px;
+            background: hsl(0, 70%, 97%);
+            border: 2px solid hsl(0, 70%, 50%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+        }
+
+        .error-icon svg {
+            width: 40px;
+            height: 40px;
+            color: hsl(0, 70%, 50%);
+        }
+
+        .error-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--color-text-primary);
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .error-message {
+            font-size: 16px;
+            color: var(--color-text-secondary);
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        .error-details {
+            background: var(--color-surface-2);
+            border: 1px solid var(--color-border-soft);
+            border-radius: var(--radius-lg);
+            padding: 12px;
+            margin-bottom: 24px;
+        }
+
+        .error-details small {
+            font-size: 13px;
+            color: var(--color-text-tertiary);
+            font-family: monospace;
+        }
+
+        .error-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 20px;
+            border: none;
+            border-radius: var(--radius-lg);
+            font-size: 14px;
+            font-weight: 500;
+            font-family: var(--font-body);
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background: var(--color-sage);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--color-sage);
+            filter: brightness(0.9);
+            transform: translateY(-1px);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--color-text-secondary);
+            border: 1px solid var(--color-border);
+        }
+
+        .btn-ghost:hover {
+            background: var(--color-surface-2);
+            color: var(--color-text-primary);
+            transform: translateY(-1px);
+        }
+
+        .btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            .error-card {
+                padding: 32px 24px;
+            }
+
+            .error-icon {
+                width: 64px;
+                height: 64px;
+                margin-bottom: 20px;
+            }
+
+            .error-icon svg {
+                width: 32px;
+                height: 32px;
+            }
+
+            .error-title {
+                font-size: 24px;
+            }
+
+            .error-message {
+                font-size: 15px;
+            }
+        }
+    </style>
+</body>
+</html>

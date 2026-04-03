@@ -31,3 +31,63 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
+# ======================
+# Node.js
+# ======================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ======================
+# Build / Output
+# ======================
+dist/
+build/
+.out/
+.next/
+coverage/
+
+# ======================
+# Environment variables
+# ======================
+.env
+.env.*
+!.env.example
+
+# ======================
+# Logs
+# ======================
+logs/
+*.log
+
+# ======================
+# OS files
+# ======================
+.DS_Store
+Thumbs.db
+
+# ======================
+# IDE / Editor
+# ======================
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ======================
+# Temporary files
+# ======================
+tmp/
+temp/
+.cache/
+
+# ======================
+# Tailwind (optional)
+# ======================
+# If you DON'T want to commit generated CSS
+# (uncomment if needed)
+# src/main/resources/static/css/style.css

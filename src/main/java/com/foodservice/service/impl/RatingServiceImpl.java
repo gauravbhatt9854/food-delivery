@@ -19,8 +19,7 @@ public class RatingServiceImpl implements RatingService {
 
         Pageable pageable = PageRequest.of(
                 page,
-                size,
-                Sort.by(Sort.Direction.DESC, "averageRating")
+                size
         );
 
         Page<TopRatedRestaurantDTO> result =

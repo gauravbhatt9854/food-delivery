@@ -12,55 +12,69 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Your CSS -->
-    <link rel="stylesheet" th:href="@{/css/customer/customer-detail.css}">
+    <!-- Tailwind CSS -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 
     <!-- JS -->
     <script th:src="@{/js/customer/customer-detail.js}" defer></script>
 </head>
 
-<body>
+<body class="bg-gray-100 font-[Inter] p-6">
 
-<button onclick="window.history.back()">
+<!-- Back Button -->
+<button onclick="window.history.back()"
+        class="flex items-center gap-2 px-4 py-2 bg-gray-800 text-white rounded-lg shadow hover:bg-gray-700 transition mb-6">
     <i class="fa fa-arrow-left"></i> Back
 </button>
 
-<div class="detail-card">
+<!-- Card -->
+<div class="max-w-xl mx-auto bg-white rounded-xl shadow-md p-6">
 
-    <h2 class="title">
-        <i class="fa fa-user"></i> Customer Detail
+    <h2 class="text-xl font-semibold text-gray-800 mb-6 flex items-center gap-2">
+        <i class="fa fa-user text-blue-500"></i> Customer Detail
     </h2>
 
-    <div class="row">
-        <span class="label"><i class="fa fa-user"></i> Name</span>
-        <span class="value" th:text="${customer.customerName}"></span>
+    <!-- Row -->
+    <div class="flex justify-between py-2 border-b">
+        <span class="text-gray-600 font-medium">
+            <i class="fa fa-user text-blue-500"></i> Name
+        </span>
+        <span class="text-gray-800" th:text="${customer.customerName}"></span>
     </div>
 
-    <div class="row">
-        <span class="label"><i class="fa fa-envelope"></i> Email</span>
-        <span class="value" th:text="${customer.customerEmail}"></span>
+    <div class="flex justify-between py-2 border-b">
+        <span class="text-gray-600 font-medium">
+            <i class="fa fa-envelope text-green-500"></i> Email
+        </span>
+        <span class="text-gray-800" th:text="${customer.customerEmail}"></span>
     </div>
 
-    <div class="row">
-        <span class="label"><i class="fa fa-phone"></i> Phone</span>
-        <span class="value" th:text="${customer.customerPhone}"></span>
+    <div class="flex justify-between py-2">
+        <span class="text-gray-600 font-medium">
+            <i class="fa fa-phone text-purple-500"></i> Phone
+        </span>
+        <span class="text-gray-800" th:text="${customer.customerPhone}"></span>
     </div>
 
 </div>
 
-<div class="actions">
+<!-- Actions -->
+<div class="max-w-xl mx-auto mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
 
-    <button class="btn"
+    <button
+            class="flex items-center justify-center gap-2 px-4 py-3 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600 transition"
             th:onclick="'window.location.href=\'/customers/' + ${customer.customerId} + '/addresses\''">
         <i class="fa fa-location-dot"></i> Addresses
     </button>
 
-    <button class="btn"
+    <button
+            class="flex items-center justify-center gap-2 px-4 py-3 bg-green-500 text-white rounded-lg shadow hover:bg-green-600 transition"
             th:onclick="'window.location.href=\'/customers/' + ${customer.customerId} + '/orders\''">
         <i class="fa fa-cart-shopping"></i> Orders
     </button>
 
-    <button class="btn"
+    <button
+            class="flex items-center justify-center gap-2 px-4 py-3 bg-purple-500 text-white rounded-lg shadow hover:bg-purple-600 transition"
             th:onclick="'window.location.href=\'/customers/' + ${customer.customerId} + '/analytics\''">
         <i class="fa fa-chart-line"></i> Analytics
     </button>

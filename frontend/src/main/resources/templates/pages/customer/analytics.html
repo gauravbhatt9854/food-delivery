@@ -1,47 +1,60 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <!-- Basic Setup -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Customer Analytics</title>
 
-    <!-- Google Font -->
+    <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Your CSS -->
-    <link rel="stylesheet" th:href="@{/css/customer/analytics.css}">
+    <!-- Tailwind -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 
-    <!-- JS -->
+    <!-- Your JS (only animation now) -->
     <script th:src="@{/js/customer/analytics.js}" defer></script>
 </head>
 
-<body>
+<body class="bg-gray-100 font-[Inter] p-6">
 
-<button onclick="window.history.back()">
+<!-- Back Button -->
+<button onclick="window.history.back()"
+        class="flex items-center gap-2 px-4 py-2 bg-gray-800 text-white rounded-lg shadow hover:bg-gray-700 transition mb-6">
     <i class="fa fa-arrow-left"></i> Back
 </button>
 
-<h2><i class="fa fa-chart-line"></i> Customer Analytics</h2>
+<!-- Heading -->
+<h2 class="text-2xl font-semibold text-gray-800 mb-6">
+    <i class="fa fa-chart-line text-blue-500"></i> Customer Analytics
+</h2>
 
-<div class="container">
+<!-- Cards -->
+<div class="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
-    <div class="card">
-        <h3><i class="fa fa-box"></i> Total Orders</h3>
-        <p th:text="${analytics.totalOrders}"></p>
+    <div class="card bg-white rounded-xl shadow-md p-6 text-center">
+        <h3 class="text-sm text-gray-500 mb-2">
+            <i class="fa fa-box text-blue-500"></i> Total Orders
+        </h3>
+        <p class="text-2xl font-bold text-gray-800" th:text="${analytics.totalOrders}"></p>
     </div>
 
-    <div class="card">
-        <h3><i class="fa fa-indian-rupee-sign"></i> Total Spend</h3>
-        <p>₹ <span th:text="${analytics.totalSpend}"></span></p>
+    <div class="card bg-white rounded-xl shadow-md p-6 text-center">
+        <h3 class="text-sm text-gray-500 mb-2">
+            <i class="fa fa-indian-rupee-sign text-green-500"></i> Total Spend
+        </h3>
+        <p class="text-2xl font-bold text-gray-800">
+            ₹ <span th:text="${analytics.totalSpend}"></span>
+        </p>
     </div>
 
-    <div class="card">
-        <h3><i class="fa fa-calculator"></i> Average Order Value</h3>
-        <p>₹ <span th:text="${analytics.avgOrderValue}"></span></p>
+    <div class="card bg-white rounded-xl shadow-md p-6 text-center">
+        <h3 class="text-sm text-gray-500 mb-2">
+            <i class="fa fa-calculator text-purple-500"></i> Avg Order Value
+        </h3>
+        <p class="text-2xl font-bold text-gray-800">
+            ₹ <span th:text="${analytics.avgOrderValue}"></span>
+        </p>
     </div>
 
 </div>
