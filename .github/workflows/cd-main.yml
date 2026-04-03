@@ -44,6 +44,7 @@ jobs:
           key: ${{ secrets.MACHINE }}
           source: "target/foodservice-backend.jar"
           target: "/home/aman/foodservice/backend/"
+          strip_components: 1
 
       - name: Copy Frontend to Server
         uses: appleboy/scp-action@v0.1.7
@@ -53,6 +54,7 @@ jobs:
           key: ${{ secrets.MACHINE }}
           source: "frontend/target/foodservice-frontend.jar"
           target: "/home/aman/foodservice/frontend/"
+          strip_components: 2
 
       - name: Restart Application
         uses: appleboy/ssh-action@v1.0.0
