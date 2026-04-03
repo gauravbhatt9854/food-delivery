@@ -22,7 +22,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 
         ApiGetRequest<RestaurantRatingsDTO> apiGetRequest = new ApiGetRequest<>(webClient);
 
-        String url = "/restaurants/" + id + "/ratings";
+        String url = "/restaurants/ratings/" + id;
 
         ParameterizedTypeReference<ApiResponseDTO<RestaurantRatingsDTO>> typeRef =
                 new ParameterizedTypeReference<>() {};

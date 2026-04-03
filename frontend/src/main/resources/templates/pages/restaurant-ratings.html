@@ -52,15 +52,15 @@
         <div class="content fade-up">
 
             <!-- Stats bar -->
-            <div class="ratings-stats-row" th:if="${restaurantRatingsDTO != null and restaurantRatingsDTO.ratings != null}">
+                <div class="ratings-stats-row" th:if="${restaurantRatingsDTO != null and restaurantRatingsDTO.content != null}">
                 <div class="stat-chip">
                     <span class="stat-chip-dot" style="background:hsl(111,35%,55%)"></span>
-                    <span th:text="${restaurantRatingsDTO.ratings.page.totalElements} + ' total ratings'">0 total ratings</span>
+                    <span th:text="${restaurantRatingsDTO.page.totalElements} + ' total ratings'">0 total ratings</span>
                 </div>
                 <span class="topbar-stat-sep">·</span>
                 <div class="stat-chip">
                     <span class="stat-chip-dot" style="background:hsl(40,70%,55%)"></span>
-                    <span th:text="'Page ' + (${restaurantRatingsDTO.ratings.page.number} + 1) + ' of ' + ${restaurantRatingsDTO.ratings.page.totalPages}">Page 1 of 1</span>
+                    <span th:text="'Page ' + (${restaurantRatingsDTO.page.number} + 1) + ' of ' + ${restaurantRatingsDTO.page.totalPages}">Page 1 of 1</span>
                 </div>
             </div>
 
@@ -157,11 +157,11 @@
             </div>
 
             <!-- Ratings Table Card -->
-            <div class="table-card" th:if="${restaurantRatingsDTO != null and restaurantRatingsDTO.ratings != null}">
+            <div class="table-card" th:if="${restaurantRatingsDTO != null and restaurantRatingsDTO.content != null}">
                 <div class="table-header">
                     <span class="table-header-title">Ratings &amp; Reviews</span>
                     <span class="table-header-count"
-                          th:text="${#lists.size(restaurantRatingsDTO.ratings.content)} + ' results'">— results</span>
+                          th:text="${#lists.size(restaurantRatingsDTO.content)} + ' results'">— results</span>
                 </div>
 
                 <div class="table-scroll">
@@ -175,7 +175,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="r : ${restaurantRatingsDTO.ratings.content}">
+                        <tr th:each="r : ${restaurantRatingsDTO.content}">
 
                             <!-- Customer -->
                             <td>
@@ -211,7 +211,7 @@
                         </tr>
 
                         <!-- Empty state row -->
-                        <tr th:if="${#lists.isEmpty(restaurantRatingsDTO.ratings.content)}">
+                        <tr th:if="${#lists.isEmpty(restaurantRatingsDTO.content)}">
                             <td colspan="4">
                                 <div class="empty-state" style="padding:40px 0">
                                     <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
@@ -228,12 +228,12 @@
                 <!-- Pagination -->
                 <div class="pagination-bar">
                     <div class="page-info">
-                        Showing <strong th:text="${#lists.size(restaurantRatingsDTO.ratings.content)}">0</strong> results
+                        Showing <strong th:text="${#lists.size(restaurantRatingsDTO.content)}">0</strong> results
                     </div>
                     <div class="page-controls">
                         <th:block th:with="
-                            totalPages=${restaurantRatingsDTO.ratings.page.totalPages},
-                            currentPage=${restaurantRatingsDTO.ratings.page.number}">
+                            totalPages=${restaurantRatingsDTO.page.totalPages},
+                            currentPage=${restaurantRatingsDTO.page.number}">
 
                             <button class="page-btn"
                                     th:classappend="${currentPage <= 0} ? 'disabled'"
@@ -546,7 +546,9 @@
 
 <script>
     function getCurrentRestaurantId() {
-        const match = window.location.pathname.match(/\/restaurants\/(\d+)\/ratings/);
+<!--        const match = window.location.pathname.match(/\/restaurants\/(\d+)\/ratings/);-->
+        const match = window.location.pathname.match(/\/restaurants\/ratings\/(\d+)/);
+        console.log(match);
         return match ? match[1] : null;
     }
 
@@ -559,7 +561,7 @@
             setTimeout(() => input.style.borderColor = '', 2000);
             return;
         }
-        window.location.href = '/restaurants/' + encodeURIComponent(id) + '/ratings';
+        window.location.href = '/restaurants/' + 'ratings/' + encodeURIComponent(id);
     }
 
     function applyFilters() {
@@ -591,7 +593,7 @@
     function clearFilters() {
         const id = getCurrentRestaurantId();
         if (!id) return;
-        window.location.href = '/restaurants/' + id + '/ratings';
+        window.location.href = '/restaurants/' + '/ratings' + id;
     }
 
     function goRatingsPage(pageNumber) {

@@ -18,7 +18,13 @@ import java.util.Map;
 public class RepositoryController {
     private final RestaurantService restaurantService;
 
-    @GetMapping("/{id}/ratings")
+    @GetMapping("/ratings")
+    public String getRestaurantRevenuePage(@CookieValue(name = "token", required = true) String token) {
+        return "pages/restaurant-ratings";
+
+    }
+
+    @GetMapping("/ratings/{id}")
     public String getRestaurantRatings(
             @PathVariable("id") Integer restaurantId,
             @RequestParam(required = false) Integer rating,
@@ -29,10 +35,11 @@ public class RepositoryController {
             @RequestParam(required = false) String customerName,
             @RequestParam(defaultValue = "0") Integer page,
             @RequestParam(defaultValue = "10") Integer size,
-            @CookieValue(value = "authToken", required = false) String token,
+            @CookieValue(value = "token", required = true) String token,
             Model model) {
 
         try {
+            System.out.println("API HITTED");
             log.info("Fetching ratings for restaurant ID: {} with filters", restaurantId);
 
             Map<String, String> params = new HashMap<>();
