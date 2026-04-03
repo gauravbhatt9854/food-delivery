@@ -1,18 +1,18 @@
 package com.foodservice.controller;
 
 import com.foodservice.constants.RestaurantConstants;
-import com.foodservice.entity.dto.ApiResponseDTO;
-import com.foodservice.entity.dto.RatingResponseDTO;
-import com.foodservice.entity.dto.RestaurantResponseDTO;
-import com.foodservice.entity.dto.TopRatedRestaurantDTO;
+import com.foodservice.entity.dto.*;
 import com.foodservice.service.RatingService;
 import com.foodservice.service.RestaurantService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 
 
 @Slf4j
@@ -40,17 +40,30 @@ public class RestaurantController {
                         restaurantList));
     }
 
-    @GetMapping("/{id}/ratings")
+    @GetMapping("/ratings/{id}")
     public ResponseEntity<ApiResponseDTO> fetchRestaurantRatings(
             @PathVariable("id") Integer restaurantId,
-            @RequestParam(defaultValue = "0") Integer page,
-            @RequestParam(defaultValue = "10") Integer size){
+            @RequestParam(defaultValue = "0")  Integer page,
+            @RequestParam(defaultValue = "10") Integer size,
+            @RequestParam(required = false) Integer rating,
+            @RequestParam(required = false) Integer minRating,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate,
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) String customerName) {
 
-        log.info("Fetching ratings for restaurant ID: {} - Page: {}, Size: {}", restaurantId, page, size);
+        RatingFilterDTO filter = new RatingFilterDTO(
+                rating,
+                minRating,
+                fromDate != null ? fromDate.atStartOfDay()   : null,
+                toDate   != null ? toDate.atTime(23, 59, 59) : null,
+                keyword,
+                customerName
+        );
 
-        Page<RatingResponseDTO> ratingsList = restaurantService.getRestaurantRatings(restaurantId, page, size);
+        Page<RatingResponseDTO> ratingsList =
+                restaurantService.getRestaurantRatings(restaurantId, filter, page, size);
 
-        log.info("Fetched {} ratings for restaurant ID: {}", ratingsList.getNumberOfElements(), restaurantId);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new ApiResponseDTO(
                         RestaurantConstants.STATUS_200,

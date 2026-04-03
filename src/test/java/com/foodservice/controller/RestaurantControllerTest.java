@@ -1,5 +1,6 @@
 package com.foodservice.controller;
 
+import com.foodservice.entity.dto.RatingFilterDTO;
 import com.foodservice.entity.dto.RatingResponseDTO;
 import com.foodservice.entity.dto.RestaurantResponseDTO;
 import com.foodservice.entity.dto.TopRatedRestaurantDTO;
@@ -22,6 +23,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+import static org.mockito.ArgumentMatchers.*;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -137,15 +139,21 @@ class RestaurantControllerTest {
                 .andExpect(jsonPath("$.data").doesNotExist());
     }
 
-    // ── GET /api/v1/restaurants/{id}/ratings ──────────────────────────────────
+// ── GET /api/v1/restaurants/{id}/ratings ──────────────────────────────────
 
     @Test
-    @DisplayName("PASS - GET /{id}/ratings returns 200 with rating data")
+    @DisplayName("PASS - GET /ratings/{id} returns 200 with rating data")
     void fetchRestaurantRatings_Pass() throws Exception {
         var page = new PageImpl<>(List.of(mockRating));
-        when(restaurantService.getRestaurantRatings(eq(1), anyInt(), anyInt())).thenReturn(page);
 
-        mockMvc.perform(get("/api/v1/restaurants/{id}/ratings", 1)
+        when(restaurantService.getRestaurantRatings(
+                eq(1),
+                any(RatingFilterDTO.class),
+                eq(0),
+                eq(10)
+        )).thenReturn(page);
+
+        mockMvc.perform(get("/api/v1/restaurants/ratings/{id}", 1)
                         .param("page", "0")
                         .param("size", "10"))
                 .andExpect(status().isOk())
@@ -162,10 +170,15 @@ class RestaurantControllerTest {
     @Test
     @DisplayName("FAIL - GET /{id}/ratings throws RestaurantNotFoundException → handled by GlobalExceptionHandler → 404")
     void fetchRestaurantRatings_Fail_RestaurantNotFound() throws Exception {
-        when(restaurantService.getRestaurantRatings(eq(999), anyInt(), anyInt()))
-                .thenThrow(new RestaurantNotFoundException("Restaurant not found with ID: 999"));
 
-        mockMvc.perform(get("/api/v1/restaurants/{id}/ratings", 999)
+        when(restaurantService.getRestaurantRatings(
+                eq(999),
+                any(RatingFilterDTO.class),
+                anyInt(),
+                anyInt()
+        )).thenThrow(new RestaurantNotFoundException("Restaurant not found with ID: 999"));
+
+        mockMvc.perform(get("/api/v1/restaurants/ratings/{id}", 999)
                         .param("page", "0")
                         .param("size", "10"))
                 .andExpect(status().isNotFound())
@@ -174,7 +187,6 @@ class RestaurantControllerTest {
                 .andExpect(jsonPath("$.message").value("Restaurant not found with ID: 999"))
                 .andExpect(jsonPath("$.data").doesNotExist());
     }
-
 
     // TOP RATINGS TEST CASES FROM HERE---------------------------
 

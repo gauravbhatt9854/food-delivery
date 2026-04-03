@@ -1,5 +1,6 @@
 package com.foodservice.service.impl;
 
+import com.foodservice.entity.dto.RatingFilterDTO;
 import com.foodservice.entity.dto.RatingResponseDTO;
 import com.foodservice.entity.dto.RestaurantResponseDTO;
 import com.foodservice.config.CustomMapper;
@@ -31,16 +32,24 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public Page<RatingResponseDTO> getRestaurantRatings(Integer restaurantId, Integer page, Integer size) {
-        log.info("Fetching ratings for restaurant ID: {} with pagination - Page: {}, Size: {}", restaurantId, page, size);
-
+    public Page<RatingResponseDTO> getRestaurantRatings(Integer restaurantId,
+                                                        RatingFilterDTO filter,
+                                                        Integer page, Integer size) {
         if (!restaurantRepository.existsById(restaurantId)) {
-            log.error("Failed to fetch ratings. Restaurant ID {} not found.", restaurantId);
             throw new RestaurantNotFoundException("Restaurant not found with ID: " + restaurantId);
         }
 
-        return ratingRepository.findByRestaurant_RestaurantId(restaurantId, PageRequest.of(page, size))
-                .map(CustomMapper::toRatingDto);
+        return ratingRepository.findByRestaurantWithFilters(
+                restaurantId,
+                filter.getRating(),
+                filter.getMinRating(),
+                filter.getFromDate(),
+                filter.getToDate(),
+                filter.getKeyword(),
+                filter.getCustomerName(),
+                PageRequest.of(page, size)
+        ).map(CustomMapper::toRatingDto);
     }
+
 
 }
