@@ -1,38 +1,31 @@
 package com.foodservice.frontend.service;
 
+import java.util.Collections;
 import java.util.List;
 
-import com.foodservice.frontend.entity.dto.ApiResponseDTO;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import com.foodservice.frontend.entity.dto.OrderCouponDTO;
+import com.foodservice.frontend.util.ApiGetRequest;
 
 @Service
 public class CouponClientService {
 
-    private final WebClient webClient;
+    private final ApiGetRequest<List<OrderCouponDTO>> apiGetRequest;
 
-    public CouponClientService(WebClient webClient) {
-        this.webClient = webClient;
+    public CouponClientService(ApiGetRequest<List<OrderCouponDTO>> apiGetRequest) {
+        this.apiGetRequest = apiGetRequest;
     }
 
+    // Fetch coupons for a given order
     public List<OrderCouponDTO> getCouponsByOrder(int orderId, String token) {
 
-        System.out.println("Sending token to backend: " + token);
-
-        ApiResponseDTO<List<OrderCouponDTO>> response =
-                webClient.get()
-                        .uri("/coupons/order/{orderId}", orderId)
-                        .header("Cookie", "token=" + token)   // 🔥 CRITICAL LINE
-                        .retrieve()
-                        .bodyToMono(new ParameterizedTypeReference<ApiResponseDTO<List<OrderCouponDTO>>>() {})
-                        .block();
-
-        System.out.println("FULL RESPONSE: " + response);
-
-        return response.getData();
+        return apiGetRequest.get(
+                "/coupons/order/" + orderId,
+                Collections.emptyMap(),
+                token,
+                new ParameterizedTypeReference<>() {}
+        );
     }
-
 }

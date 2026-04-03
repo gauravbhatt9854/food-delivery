@@ -19,28 +19,22 @@ public class CouponViewController {
         this.couponClientService = couponClientService;
     }
 
-
+    // Load coupons page
     @GetMapping
     public String showPage() {
-        return "coupons";   //no layout direct page
+        return "coupons";
     }
 
+    // Fetch coupons for a given order
     @GetMapping("/coupons")
     public String getCoupons(@RequestParam int orderId,
                              Model model,
                              @CookieValue(name = "token", required = true) String token) {
 
-        System.out.println("TOKEN FROM COOKIE: " + token);
+        List<OrderCouponDTO> coupons =
+                couponClientService.getCouponsByOrder(orderId, token);
 
-        try {
-            List<OrderCouponDTO> coupons =
-                    couponClientService.getCouponsByOrder(orderId, token);
-
-            model.addAttribute("coupons", coupons);
-
-        } catch (Exception e) {
-            model.addAttribute("error", "No coupons found");
-        }
+        model.addAttribute("coupons", coupons);
 
         return "coupons";
     }
