@@ -122,4 +122,14 @@ public class GlobalExceptionHandler {
                 .body(new ApiResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), "An unexpected error occurred. Please try again later.", null));
     }
 
+
+    //driverexception
+
+    @ExceptionHandler(InvalidOperationException.class)
+    public ResponseEntity<ApiResponseDTO> handleInvalidOperation(InvalidOperationException ex) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new ApiResponseDTO(400, ex.getMessage(), null));
+    }
+
 }

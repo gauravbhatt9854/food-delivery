@@ -3,6 +3,7 @@ package com.foodservice.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.foodservice.entity.Customer;
 import com.foodservice.entity.dto.*;
+import com.foodservice.exception.InvalidOperationException;
 import com.foodservice.exception.OrderInvalidRequestException;
 import com.foodservice.exception.ResourceNotFoundException;
 import com.foodservice.service.OrderService;
@@ -313,4 +314,69 @@ class OrderControllerTest {
                 .andExpect(jsonPath("$.message").value("404 NOT_FOUND, Restaurant not found with ID: 999"))
                 .andExpect(jsonPath("$.data").doesNotExist());
     }
+
+
+    //driversbyorderid
+    //--success case----
+
+    @Test
+    @DisplayName("GET /api/v1/orders/{id}/driver - Success")
+    void getDriverByOrderId_Success() throws Exception {
+
+        DriverResponseDTO driver = new DriverResponseDTO(
+                1,
+                "Rahul",
+                "9999999999",
+                "Bike"
+        );
+
+        when(orderService.getDriverByOrderId(1)).thenReturn(driver);
+
+        mockMvc.perform(get("/api/v1/orders/{id}/driver", 1))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.status").value(200))
+                .andExpect(jsonPath("$.message")
+                        .value("Driver fetched successfully for order ID: 1"))
+                .andExpect(jsonPath("$.data").exists())
+                .andExpect(jsonPath("$.data.driverId").value(1))
+                .andExpect(jsonPath("$.data.driverName").value("Rahul"))
+                .andExpect(jsonPath("$.data.driverPhone").value("9999999999"))
+                .andExpect(jsonPath("$.data.driverVehicle").value("Bike"));
+    }
+
+    //--order not found---
+    @Test
+    @DisplayName("GET /api/v1/orders/{id}/driver - Order Not Found")
+    void getDriverByOrderId_OrderNotFound() throws Exception {
+
+        when(orderService.getDriverByOrderId(999))
+                .thenThrow(new ResourceNotFoundException("Order not found with id: 999"));
+
+        mockMvc.perform(get("/api/v1/orders/{id}/driver", 999))
+                .andExpect(status().isNotFound())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.message")
+                        .value("404 NOT_FOUND, Order not found with id: 999"))
+                .andExpect(jsonPath("$.data").doesNotExist());
+    }
+
+    //--driver not got assignrd---
+    @Test
+    @DisplayName("GET /api/v1/orders/{id}/driver - Driver Not Assigned")
+    void getDriverByOrderId_DriverNotAssigned() throws Exception {
+
+        when(orderService.getDriverByOrderId(1))
+                .thenThrow(new InvalidOperationException("Driver not assigned for order id: 1"));
+
+        mockMvc.perform(get("/api/v1/orders/{id}/driver", 1))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.message")
+                        .value("Driver not assigned for order id: 1"))
+                .andExpect(jsonPath("$.data").doesNotExist());
+    }
+
 }

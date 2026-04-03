@@ -17,4 +17,6 @@ public interface OrderService {
 
     RestaurantRevenueDTO getRevenueByRestaurantId(Integer restaurantId, LocalDate fromDate, LocalDate toDate);
 
+    DriverResponseDTO getDriverByOrderId(Integer orderId);
+
 }

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Integer> {
@@ -98,4 +99,12 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
             @Param("fromDate") LocalDateTime fromDate,
             @Param("toDate") LocalDateTime toDate);
 
+
+    //delivery driver part
+    @Query("""
+    SELECT o FROM Order o
+    JOIN FETCH o.deliveryDriver
+    WHERE o.orderId = :orderId
+    """)
+    Optional<Order> findOrderWithDriver(@Param("orderId") Integer orderId);
 }

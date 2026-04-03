@@ -1,0 +1,40 @@
+<div class="content">
+
+    <h2 class="page-title">Order Coupons</h2>
+
+    <form th:action="@{/view/orders/coupons}" method="get">
+        <input type="number"
+               name="orderId"
+               th:value="${param.orderId}"
+               placeholder="Enter Order ID"
+               required />
+
+        <button type="submit">Fetch Coupons</button>
+    </form>
+
+    <!-- RESULT -->
+    <div th:if="${coupons}">
+        <table>
+            <tr>
+                <th>Code</th>
+                <th>Discount</th>
+            </tr>
+
+            <tr th:each="c : ${coupons}">
+                <td th:text="${c.couponCode}"></td>
+                <td th:text="${c.discount}"></td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- EMPTY -->
+    <div th:if="${#lists.isEmpty(coupons)}">
+        No coupons found
+    </div>
+
+    <!-- ERROR -->
+    <div th:if="${error}">
+        <p th:text="${error}"></p>
+    </div>
+
+</div>

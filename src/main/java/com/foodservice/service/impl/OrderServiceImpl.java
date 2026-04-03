@@ -2,10 +2,12 @@ package com.foodservice.service.impl;
 
 import com.foodservice.config.CustomMapper;
 import com.foodservice.entity.Customer;
+import com.foodservice.entity.DeliveryDriver;
 import com.foodservice.entity.Order;
 import com.foodservice.entity.OrderItem;
 import com.foodservice.entity.dto.*;
 import com.foodservice.exception.InvalidDateRangeException;
+import com.foodservice.exception.InvalidOperationException;
 import com.foodservice.exception.OrderInvalidRequestException;
 import com.foodservice.exception.ResourceNotFoundException;
 import com.foodservice.repository.CustomerRepository;
@@ -102,5 +104,29 @@ public class OrderServiceImpl implements OrderService {
         }
 
         return revenue;
+    }
+
+
+    // gettingdriverbyorders here
+    @Override
+    public DriverResponseDTO getDriverByOrderId(Integer orderId) {
+
+        Order order = orderRepository.findOrderWithDriver(orderId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Order not found with id: " + orderId)
+                );
+
+        if (order.getDeliveryDriver() == null) {
+            throw new InvalidOperationException("Driver not assigned for order id: " + orderId);
+        }
+
+        DeliveryDriver driver = order.getDeliveryDriver();
+
+        return new DriverResponseDTO(
+                driver.getDriverId(),
+                driver.getDriverName(),
+                driver.getDriverPhone(),
+                driver.getDriverVehicle()
+        );
     }
 }
