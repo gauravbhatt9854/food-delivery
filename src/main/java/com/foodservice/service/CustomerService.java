@@ -18,5 +18,5 @@ public interface CustomerService {
 
     List<DeliveryAddressDTO> getAddressesByCustomerId(Integer customerId);
 
-    List<CustomerDTO> getCustomersByCity(String city, @Min(0) Integer page, @Min(1) Integer size);
+    List<CustomerDTO> getCustomersByCity(String city, Integer page, Integer size);
 }

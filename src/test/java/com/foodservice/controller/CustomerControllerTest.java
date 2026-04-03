@@ -195,7 +195,7 @@ class CustomerControllerTest {
     @Test
     @DisplayName("GET /customers/city - Success")
     void getCustomersByCity_Success() throws Exception {
-        when(customerService.getCustomersByCity("Delhi"))
+        when(customerService.getCustomersByCity("Delhi" ,0,5))
                 .thenReturn(List.of(customerDTO));
 
         mockMvc.perform(get("/api/v1/customers/city")
@@ -336,7 +336,7 @@ class CustomerControllerTest {
     @DisplayName("GET /customers/city - Not Found (No Customers in City)")
     void getCustomersByCity_NotFound() throws Exception {
 
-        when(customerService.getCustomersByCity("UnknownCity"))
+        when(customerService.getCustomersByCity("UnknownCity",0,5))
                 .thenThrow(new ResourceNotFoundException("No customers found in city"));
 
         mockMvc.perform(get("/api/v1/customers/city")
