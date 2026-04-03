@@ -59,7 +59,7 @@ jobs:
         with:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.USER }}
-          key: ${{ secrets.SSH_KEY }}
+          key: ${{ secrets.MACHINE }}
           script: |
             cd /home/aman/foodservice/backend
             pkill -f foodservice-backend.jar || true
