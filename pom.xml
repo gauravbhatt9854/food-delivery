@@ -118,6 +118,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<finalName>foodservice-backend</finalName>
 	</build>
 
 </project>

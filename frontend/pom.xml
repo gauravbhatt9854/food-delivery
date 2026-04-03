@@ -67,6 +67,10 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
+
+		<finalName>
+			foodservice-frontend
+		</finalName>
 	</build>
 
 </project>

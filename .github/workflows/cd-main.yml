@@ -1,0 +1,75 @@
+name: CD
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - closed
+
+jobs:
+  deploy:
+    if: github.event.pull_request.merged == true &&
+      github.event.pull_request.base.ref == 'main' &&
+      github.event.pull_request.head.ref == 'dev'
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout main branch
+        uses: actions/checkout@v3
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Run Tests
+        run: mvn clean test
+
+      - name: Build Backend
+        run: mvn clean package -DskipTests
+
+      - name: Build Frontend
+        run: |
+          cd frontend
+          mvn clean package -DskipTests
+
+      - name: Copy Backend to Server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.MACHINE }}
+          source: "target/foodservice-backend.jar"
+          target: "/home/aman/foodservice/backend/"
+
+      - name: Copy Frontend to Server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.MACHINE }}
+          source: "frontend/target/foodservice-frontend.jar"
+          target: "/home/aman/foodservice/frontend/"
+
+      - name: Restart Application
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd /home/aman/foodservice/backend
+            pkill -f foodservice-backend.jar || true
+            nohup java -jar foodservice-backend.jar \
+              --spring.config.location=file:/home/aman/foodservice/backend/ \
+              --spring.profiles.active=prod \
+              > backend.log 2>&1 &
+            cd /home/aman/foodservice/frontend
+            pkill -f foodservice-frontend.jar || true
+            nohup java -jar foodservice-frontend.jar \
+              --spring.config.location=file:/home/aman/foodservice/frontend/ \
+              --spring.profiles.active=prod \
+              > frontend.log 2>&1 &
