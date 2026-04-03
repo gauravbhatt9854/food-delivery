@@ -36,6 +36,14 @@ public class GlobalExceptionHandler {
 
     }
 
+    @ExceptionHandler(InvalidDateRangeException.class)
+    public ResponseEntity<ApiResponseDTO> handleInvalidDateRangeException(InvalidDateRangeException ex) {
+        log.warn("Invalid date range: {}", ex.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new ApiResponseDTO(HttpStatus.BAD_REQUEST.value(), ex.getMessage(), null));
+    }
+
     @ExceptionHandler(RestaurantNotFoundException.class)
     public ResponseEntity<ApiResponseDTO> handleRestaurantNotFoundException(RestaurantNotFoundException ex){
         log.warn("Restaurant not found: {}", ex.getMessage());

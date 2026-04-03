@@ -5,6 +5,7 @@ import com.foodservice.entity.Customer;
 import com.foodservice.entity.Order;
 import com.foodservice.entity.OrderItem;
 import com.foodservice.entity.dto.*;
+import com.foodservice.exception.InvalidDateRangeException;
 import com.foodservice.exception.OrderInvalidRequestException;
 import com.foodservice.exception.ResourceNotFoundException;
 import com.foodservice.repository.CustomerRepository;
@@ -68,6 +69,25 @@ public class OrderServiceImpl implements OrderService {
         if (!restaurantRepository.existsById(restaurantId)) {
             throw new ResourceNotFoundException(
                     "Restaurant not found with ID: " + restaurantId);
+        }
+
+        // Validate date range
+        if (fromDate != null && toDate != null) {
+            if (fromDate.isAfter(toDate)) {
+                throw new InvalidDateRangeException(
+                        "From date cannot be after to date. From: " + fromDate + ", To: " + toDate);
+            }
+        }
+
+        // Validate dates are not in the future
+        LocalDate today = LocalDate.now();
+        if (fromDate != null && fromDate.isAfter(today)) {
+            throw new InvalidDateRangeException(
+                    "From date cannot be in the future. From: " + fromDate + ", Today: " + today);
+        }
+        if (toDate != null && toDate.isAfter(today)) {
+            throw new InvalidDateRangeException(
+                    "To date cannot be in the future. To: " + toDate + ", Today: " + today);
         }
 
         LocalDateTime from = (fromDate != null) ? fromDate.atStartOfDay()   : null;
