@@ -39,6 +39,7 @@ build/
 .vscode/
 
 src/main/resources/application.yaml
+frontend/src/main/resources/application.yml
 
 mvnw.cmd
 application.yaml

@@ -51,19 +51,6 @@
         <!-- Content -->
         <div class="content fade-up">
 
-            <!-- Stats bar -->
-                <div class="ratings-stats-row" th:if="${restaurantRatingsDTO != null and restaurantRatingsDTO.content != null}">
-                <div class="stat-chip">
-                    <span class="stat-chip-dot" style="background:hsl(111,35%,55%)"></span>
-                    <span th:text="${restaurantRatingsDTO.page.totalElements} + ' total ratings'">0 total ratings</span>
-                </div>
-                <span class="topbar-stat-sep">·</span>
-                <div class="stat-chip">
-                    <span class="stat-chip-dot" style="background:hsl(40,70%,55%)"></span>
-                    <span th:text="'Page ' + (${restaurantRatingsDTO.page.number} + 1) + ' of ' + ${restaurantRatingsDTO.page.totalPages}">Page 1 of 1</span>
-                </div>
-            </div>
-
             <!-- Filter Bar -->
             <div class="filters-bar" th:if="${restaurantRatingsDTO != null}">
 
