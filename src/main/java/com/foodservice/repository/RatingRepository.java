@@ -16,9 +16,9 @@ import java.util.Optional;
 public interface RatingRepository extends JpaRepository<Rating, Integer> {
 
     @Query(value = """
-    SELECT r.* FROM ratings r
-    JOIN orders o ON r.order_id = o.order_id
-    JOIN customers c ON o.customer_id = c.customer_id
+    SELECT r.* FROM Ratings r
+    JOIN Orders o ON r.order_id = o.order_id
+    JOIN Customers c ON o.customer_id = c.customer_id
     WHERE r.restaurant_id = :restaurantId
     AND (:rating IS NULL OR r.rating = :rating)
     AND (:minRating IS NULL OR r.rating >= :minRating)
@@ -27,9 +27,9 @@ public interface RatingRepository extends JpaRepository<Rating, Integer> {
     AND (:keyword IS NULL OR LOWER(r.review) LIKE LOWER(CONCAT('%', :keyword, '%')))
     AND (:customerName IS NULL OR LOWER(c.customer_name) LIKE LOWER(CONCAT('%', :customerName, '%')))
     """, countQuery = """
-    SELECT COUNT(*) FROM ratings r
-    JOIN orders o ON r.order_id = o.order_id
-    JOIN customers c ON o.customer_id = c.customer_id
+    SELECT COUNT(*) FROM Ratings r
+    JOIN Orders o ON r.order_id = o.order_id
+    JOIN Customers c ON o.customer_id = c.customer_id
     WHERE r.restaurant_id = :restaurantId
     AND (:rating IS NULL OR r.rating = :rating)
     AND (:minRating IS NULL OR r.rating >= :minRating)
